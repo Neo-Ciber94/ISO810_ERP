@@ -7,6 +7,7 @@ using dotenv.net;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories;
 using ISO810_ERP.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -67,6 +68,7 @@ namespace ISO810_ERP
 #endif
 
             });
+            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ISO810_ERP", Version = "v1" });
