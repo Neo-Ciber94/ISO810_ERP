@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-const API_URL = "http://localhost:5000/api/weatherforecast/";
+const API_URL = "http://localhost:5000/api/currency/";
 
 const fetchJson = async (url: string) => {
   await delay(1000); // simulate server latency

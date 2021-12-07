@@ -17,6 +17,33 @@ public class ErpDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Name of the function to get the current date in sql
+        const string GetDateTimeNow = "GETDATE()";
+
+        modelBuilder.Entity<Account>((entity) =>
+        {
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql(GetDateTimeNow);
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql(GetDateTimeNow);
+        });
+
+        modelBuilder.Entity<Expense>((entity) =>
+        {
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql(GetDateTimeNow);
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql(GetDateTimeNow);
+        });
+
+        modelBuilder.Entity<Organization>((entity) =>
+        {
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql(GetDateTimeNow);
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql(GetDateTimeNow);
+        });
+
+        modelBuilder.Entity<Service>((entity) =>
+        {
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql(GetDateTimeNow);
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql(GetDateTimeNow);
+        });
+
         SeedDatabase(modelBuilder);
     }
 
