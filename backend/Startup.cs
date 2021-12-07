@@ -24,6 +24,14 @@ namespace ISO810_ERP
     public class Startup
     {
         const string CorsPolicy = "Everyone";
+        private static readonly bool EnableInMemoryDatabase = Environment.GetEnvironmentVariable("ISO810_ENABLE_IN_MEMORY_DB") == "true";
+        private static readonly bool EnableHttpsRedirection = Environment.GetEnvironmentVariable("ISO810_ENABLE_HTTPS") == "true";
+
+        static Startup()
+        {
+            // Read the .env file from the root of the project
+            DotEnv.Load(options: new DotEnvOptions(envFilePaths: new[] { "../.env" }));
+        }
 
         public Startup(IConfiguration configuration)
         {
@@ -35,9 +43,6 @@ namespace ISO810_ERP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Read the .env file from the root of the project
-            DotEnv.Load(options: new DotEnvOptions(envFilePaths: new[] { "../.env" }));
-
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicy,
@@ -55,18 +60,20 @@ namespace ISO810_ERP
 
             services.AddDbContext<ErpDbContext>(opt =>
             {
-#if MEMORY_DB
-                opt.UseInMemoryDatabase("ISO810_ERP");
-#else
-                string? connectionString = Environment.GetEnvironmentVariable("ISO810_ERP_DB_CONNECTION_STRING");
-                if (connectionString == null)
+                if (EnableInMemoryDatabase)
                 {
-                    throw new InvalidOperationException("ConnectionString is not set");
+                    opt.UseInMemoryDatabase("ISO810_ERP");
                 }
+                else
+                {
+                    string? connectionString = Environment.GetEnvironmentVariable("ISO810_ERP_DB_CONNECTION_STRING");
+                    if (connectionString == null)
+                    {
+                        throw new InvalidOperationException("ConnectionString is not set");
+                    }
 
-                opt.UseSqlServer(connectionString);
-#endif
-
+                    opt.UseSqlServer(connectionString);
+                }
             });
             services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
             services.AddSwaggerGen(c =>
@@ -89,7 +96,10 @@ namespace ISO810_ERP
 
             app.UseCors(CorsPolicy);
 
-            app.UseHttpsRedirection();
+            if (EnableHttpsRedirection)
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseAuthorization();
 
