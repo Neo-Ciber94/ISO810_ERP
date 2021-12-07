@@ -1,9 +1,12 @@
+// #define MEMORY_DB
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotenv.net;
 using ISO810_ERP.Models;
+using ISO810_ERP.Repositories;
+using ISO810_ERP.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -44,7 +47,11 @@ namespace ISO810_ERP
                             .AllowAnyHeader();
                     });
             });
+
+            services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+
             services.AddControllers();
+
             services.AddDbContext<ErpDbContext>(opt =>
             {
 #if MEMORY_DB
