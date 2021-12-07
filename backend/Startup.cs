@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotenv.net;
+using ISO810_ERP.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +31,9 @@ namespace ISO810_ERP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Read the .env file from the root of the project
+            DotEnv.Load(options: new DotEnvOptions(envFilePaths: new[] { "../.env" }));
+
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicy,
@@ -39,6 +45,21 @@ namespace ISO810_ERP
                     });
             });
             services.AddControllers();
+            services.AddDbContext<ErpDbContext>(opt =>
+            {
+#if MEMORY_DB
+                opt.UseInMemoryDatabase("ISO810_ERP");
+#else
+                string? connectionString = Environment.GetEnvironmentVariable("ISO810_ERP_DB_CONNECTION_STRING");
+                if (connectionString == null)
+                {
+                    throw new InvalidOperationException("ConnectionString is not set");
+                }
+
+                opt.UseSqlServer(connectionString);
+#endif
+
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ISO810_ERP", Version = "v1" });

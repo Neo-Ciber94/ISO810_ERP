@@ -12,6 +12,8 @@ public class Expense
     public Service Service { get; set; } = default!;
     public int CurrencyId { get; set; } = default!;
     public Currency Currency { get; set; } = default!;
+
+    [Column(TypeName = "decimal(18,2)")]
     public decimal Amount { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
