@@ -19,12 +19,9 @@ namespace ISO810_ERP.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IAccountRepository accountRepository;
-    private readonly JwtTokenBlackListCache tokenBlacklist;
-
-    public AccountController(IAccountRepository accountRepository, JwtTokenBlackListCache tokenBlacklist)
+    public AccountController(IAccountRepository accountRepository)
     {
         this.accountRepository = accountRepository;
-        this.tokenBlacklist = tokenBlacklist;
     }
 
     [AllowAnonymous]
@@ -75,9 +72,11 @@ public class AccountController : ControllerBase
         if (dto != null)
         {
             var account = await accountRepository.GetAccountById(dto.Id);
-            if (account != null)
+            var token = HttpContext.GetJwtToken();
+
+            if (account != null && token != null)
             {
-                var result = await accountRepository.Logout(account);
+                var result = await accountRepository.Logout(token);
                 HttpContext.RemoveCookieUserAccount();
                 return Ok(result);
             }

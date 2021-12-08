@@ -8,6 +8,8 @@ using ISO810_ERP.Dtos;
 using ISO810_ERP.Models;
 using Microsoft.IdentityModel.Tokens;
 
+namespace ISO810_ERP.Services;
+
 public static class JwtHelper
 {
     public static string GenerateToken(AccountDto account)

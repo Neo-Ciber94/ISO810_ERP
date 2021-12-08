@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using dotenv.net;
 using ISO810_ERP.Config;
+using ISO810_ERP.Extensions;
 using ISO810_ERP.Filters;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories;
@@ -74,7 +75,7 @@ namespace ISO810_ERP
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<JwtTokenBlackListCache>();
+            services.AddScoped<TypedCache>();
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers(options =>
@@ -100,32 +101,7 @@ namespace ISO810_ERP
                 }
             });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettings.JwtSecret));
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    IssuerSigningKey = key,
-                    ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        context.Token = context.Request.Cookies[Constants.AuthCookieName];
-                        return Task.CompletedTask;
-                    }
-                };
-            });
-
+            services.AddJwtAuthentication();
             services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
         }
 

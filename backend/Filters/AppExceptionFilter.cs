@@ -14,7 +14,7 @@ public class AppExceptionFilter : IExceptionFilter
         string message = context.Exception.Message;
         context.ExceptionHandled = true;
 
-        if (context.Exception is AppException)
+        if (context.Exception is AppException or ValidationException)
         {
             context.HttpContext.Response.StatusCode = 400;
         }

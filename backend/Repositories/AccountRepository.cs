@@ -1,12 +1,15 @@
 using System.Threading.Tasks;
 using AutoMapper;
+using ISO810_ERP.Config;
 using ISO810_ERP.Dtos;
 using ISO810_ERP.Exceptions;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories.Interfaces;
+using ISO810_ERP.Services;
 using ISO810_ERP.Services.Interfaces;
 using ISO810_ERP.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ISO810_ERP.Repositories;
 
@@ -15,14 +18,17 @@ public class AccountRepository : IAccountRepository
     private readonly ErpDbContext context;
     private readonly IPasswordHasher passwordHasher;
     private readonly IMapper mapper;
+    private readonly TypedCache cache;
 
     public AccountRepository(ErpDbContext context,
         IPasswordHasher passwordHasher,
-        IMapper mapper)
+        IMapper mapper,
+        TypedCache cache)
     {
         this.context = context;
         this.passwordHasher = passwordHasher;
         this.mapper = mapper;
+        this.cache = cache;
     }
 
     public async Task<ApiResponse> Signup(AccountSignup accountSignup)
@@ -65,8 +71,13 @@ public class AccountRepository : IAccountRepository
         return ApiResponse.Json(accountDto);
     }
 
-    public Task<ApiResponse> Logout(AccountDto account)
+    public Task<ApiResponse> Logout(string token)
     {
+        cache.Set(Constants.BlackListedTokenTag, token, token, new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = AppSettings.JwtDuration
+        });
+
         return Task.FromResult(ApiResponse.Successful());
     }
 

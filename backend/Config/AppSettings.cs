@@ -7,7 +7,10 @@ public static class AppSettings
 {
     private static string? _jwtSecret;
 
-    public static TimeSpan JwtDuration { get; } = TimeSpan.FromDays(1);
+    public static TimeSpan JwtDuration { get; } = TimeSpan.FromHours(1);
+
+
+    public static string JwtCookieName { get; } = "ISO810_ERP_JWT";
 
     public static string JwtSecret
     {

@@ -36,7 +36,7 @@ public readonly struct Optional<T> : IEquatable<Optional<T>>
         return hasValue ? value : defaultValue;
     }
 
-    public static implicit operator Optional<T>(Optional<Empty> empty)
+    public static implicit operator Optional<T>(Optional<Empty> _)
     {
         return new Optional<T>();
     }
