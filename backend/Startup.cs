@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotenv.net;
+using ISO810_ERP.Filters;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories;
 using ISO810_ERP.Repositories.Interfaces;
@@ -54,15 +55,19 @@ namespace ISO810_ERP
                     });
             });
 
+
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<AppExceptionFilter>();
+            });
 
-            services.AddDbContext<ErpDbContext>(opt =>
+            services.AddDbContext<ErpDbContext>(options =>
             {
                 if (EnableInMemoryDatabase)
                 {
-                    opt.UseInMemoryDatabase("ISO810_ERP");
+                    options.UseInMemoryDatabase("ISO810_ERP");
                 }
                 else
                 {
@@ -72,7 +77,7 @@ namespace ISO810_ERP
                         throw new InvalidOperationException("ConnectionString is not set");
                     }
 
-                    opt.UseSqlServer(connectionString);
+                    options.UseSqlServer(connectionString);
                 }
             });
             services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
@@ -96,10 +101,10 @@ namespace ISO810_ERP
 
             app.UseCors(CorsPolicy);
 
-            if (EnableHttpsRedirection)
+            app.UseWhen((_) => EnableHttpsRedirection, appBuilder =>
             {
-                app.UseHttpsRedirection();
-            }
+                appBuilder.UseHttpsRedirection();
+            });
 
             app.UseAuthorization();
 
