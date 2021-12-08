@@ -1,6 +1,6 @@
 
 using System.ComponentModel.DataAnnotations;
-using ISO810_ERP.Models;
+using ISO810_ERP.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -15,9 +15,9 @@ public class AppExceptionFilter : IExceptionFilter
 
         if (context.Exception is ValidationException)
         {
-            context.HttpContext.Response.StatusCode = 400;            
+            context.HttpContext.Response.StatusCode = 400;
         }
 
-        context.Result = new JsonResult(new ApiResponse(success: false, message));
+        context.Result = new JsonResult(ApiResponse.Failure(message));
     }
 }
