@@ -8,6 +8,8 @@ using ISO810_ERP.Filters;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories;
 using ISO810_ERP.Repositories.Interfaces;
+using ISO810_ERP.Services;
+using ISO810_ERP.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -55,8 +57,10 @@ namespace ISO810_ERP
                     });
             });
 
-
+            services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers(options =>
             {
