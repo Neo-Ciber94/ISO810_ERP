@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ISO810_ERP.Migrations
 {
     [DbContext(typeof(ErpDbContext))]
-    [Migration("20211208021426_Initial")]
+    [Migration("20211208232301_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

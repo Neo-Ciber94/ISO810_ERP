@@ -40,6 +40,11 @@ public class AccountRepository : IAccountRepository
             return ApiResponse.Failure("Email already exists");
         }
 
+        if (RegexUtils.IsValidEmail(accountSignup.Email) == false)
+        {
+            return ApiResponse.Failure("Invalid email format");
+        }
+
         var account = new Account
         {
             Name = accountSignup.Name,
@@ -90,14 +95,26 @@ public class AccountRepository : IAccountRepository
             throw new AppException("Account not found");
         }
 
+        if (account.Email != null && RegexUtils.IsValidEmail(account.Email) == false)
+        {
+            return ApiResponse.Failure("Invalid email format");
+        }
+
         // Change the password if the update contains a new password
         if (account.Password != null)
         {
             accountToUpdate.PasswordHash = passwordHasher.HashPassword(account.Password);
         }
 
-        accountToUpdate.Name = account.Name;
-        accountToUpdate.Email = account.Email;
+        if (account.Name != null)
+        {
+            accountToUpdate.Name = account.Name;
+        }
+
+        if (account.Email != null)
+        {
+            accountToUpdate.Email = account.Email;
+        }
 
         await context.SaveChangesAsync();
         return ApiResponse.Successful();
