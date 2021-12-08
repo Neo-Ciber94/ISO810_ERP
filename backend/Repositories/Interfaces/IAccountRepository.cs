@@ -1,5 +1,6 @@
 
 using System.Threading.Tasks;
+using ISO810_ERP.Dtos;
 using ISO810_ERP.Models;
 using ISO810_ERP.Utils;
 
@@ -12,6 +13,6 @@ public interface IAccountRepository
     public Task<ApiResponse> Logout(Account account);
     public Task<ApiResponse> Update(int id, AccountUpdate account);
     public Task<ApiResponse> Delete(int id);
-    public Task<Account?> GetAccountById(int id);
-    public Task<Account?> GetAccountByEmail(string email);
+    public Task<AccountDto?> GetAccountById(int id);
+    public Task<AccountDto?> GetAccountByEmail(string email);
 }

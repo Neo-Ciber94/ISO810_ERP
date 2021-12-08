@@ -46,12 +46,12 @@ public class AccountRepository : IAccountRepository
 
     public async Task<ApiResponse> Login(AccountLogin accountLogin)
     {
-        var account = await GetAccountByEmail(accountLogin.Email);   
+        var account = await context.Accounts.FirstOrDefaultAsync(e => e.Email == accountLogin.Email);
 
         if (account == null)
         {
             return ApiResponse.Failure("Email or password is incorrect");
-        }     
+        }
 
         if (!passwordHasher.Verify(account.PasswordHash, accountLogin.Password))
         {
@@ -105,13 +105,27 @@ public class AccountRepository : IAccountRepository
         return ApiResponse.Successful();
     }
 
-    public Task<Account?> GetAccountByEmail(string email)
+    public async Task<AccountDto?> GetAccountByEmail(string email)
     {
-        return context.Accounts.FirstOrDefaultAsync(a => a.Email == email);
+        var result = await context.Accounts.FirstOrDefaultAsync(a => a.Email == email);
+
+        if (result == null)
+        {
+            return null;
+        }
+
+        return mapper.Map<AccountDto>(result);
     }
 
-    public Task<Account?> GetAccountById(int id)
+    public async Task<AccountDto?> GetAccountById(int id)
     {
-        return context.Accounts.FirstOrDefaultAsync(a => a.Id == id);
+        var result = await context.Accounts.FirstOrDefaultAsync(a => a.Id == id);
+
+        if (result == null)
+        {
+            return null;
+        }
+
+        return mapper.Map<AccountDto>(result);
     }
-} 
+}
