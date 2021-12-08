@@ -1,9 +1,7 @@
+import { DashboardPage } from "../features/dashboard/";
+
 const Dashboard = () => {
-  return (
-    <main style={{ padding: "1rem 0" }}>
-      <h2>Dashboard</h2>
-    </main>
-  );
+  return <DashboardPage />;
 };
 
 export default Dashboard;

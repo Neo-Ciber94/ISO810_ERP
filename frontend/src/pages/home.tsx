@@ -1,9 +1,7 @@
+import { HomePage } from "../features/home";
+
 const Home = () => {
-  return (
-    <main style={{ padding: "1rem 0" }}>
-      <h2>Home</h2>
-    </main>
-  );
+  return <HomePage />;
 };
 
 export default Home;

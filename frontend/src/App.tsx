@@ -1,5 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
+import { AppContextProvider } from "./app/contexts/AppContext";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./styles/theme";
@@ -10,7 +11,9 @@ const App = () => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Routes />
+        <AppContextProvider>
+          <Routes />
+        </AppContextProvider>
       </ThemeProvider>
     </BrowserRouter>
   );
