@@ -60,6 +60,16 @@ namespace ISO810_ERP
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ISO810_ERP", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme in http cookies.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Cookie,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer"
+                });
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
