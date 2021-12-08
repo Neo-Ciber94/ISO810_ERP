@@ -5,6 +5,7 @@ using ISO810_ERP.Dtos;
 using ISO810_ERP.Extensions;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories.Interfaces;
+using ISO810_ERP.Services;
 using ISO810_ERP.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,10 +19,12 @@ namespace ISO810_ERP.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IAccountRepository accountRepository;
+    private readonly JwtTokenBlackListCache tokenBlacklist;
 
-    public AccountController(IAccountRepository accountRepository)
+    public AccountController(IAccountRepository accountRepository, JwtTokenBlackListCache tokenBlacklist)
     {
         this.accountRepository = accountRepository;
+        this.tokenBlacklist = tokenBlacklist;
     }
 
     [AllowAnonymous]

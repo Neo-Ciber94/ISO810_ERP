@@ -16,7 +16,9 @@ public class AccountRepository : IAccountRepository
     private readonly IPasswordHasher passwordHasher;
     private readonly IMapper mapper;
 
-    public AccountRepository(ErpDbContext context, IPasswordHasher passwordHasher, IMapper mapper)
+    public AccountRepository(ErpDbContext context,
+        IPasswordHasher passwordHasher,
+        IMapper mapper)
     {
         this.context = context;
         this.passwordHasher = passwordHasher;
@@ -63,9 +65,8 @@ public class AccountRepository : IAccountRepository
         return ApiResponse.Json(accountDto);
     }
 
-    public Task<ApiResponse> Logout(Account account)
+    public Task<ApiResponse> Logout(AccountDto account)
     {
-        // Any token logic should be handle in the controller
         return Task.FromResult(ApiResponse.Successful());
     }
 

@@ -70,9 +70,11 @@ namespace ISO810_ERP
                     });
             });
 
+            services.AddDistributedMemoryCache();
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<JwtTokenBlackListCache>();
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers(options =>
