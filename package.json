@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "An ERP for the asignature ISO810",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "dotnet watch run --project ./backend",

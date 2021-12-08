@@ -210,8 +210,8 @@ namespace ISO810_ERP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<long>("Account")
-                        .HasColumnType("bigint");
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Alias")
                         .IsRequired()
@@ -233,8 +233,7 @@ namespace ISO810_ERP.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Account")
-                        .IsUnique();
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Organizations");
                 });
@@ -247,11 +246,6 @@ namespace ISO810_ERP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
                     b.Property<string>("HomePage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -259,11 +253,6 @@ namespace ISO810_ERP.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
 
                     b.HasKey("Id");
 
@@ -273,274 +262,206 @@ namespace ISO810_ERP.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.mongodb.com/atlas",
-                            Name = "MongoDB",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "MongoDB"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://monday.com/",
-                            Name = "Monday",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Monday"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://circleci.com/",
-                            Name = "CircleCI",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "CircleCI"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://filestage.io/",
-                            Name = "Filestage",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Filestage"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.hubspot.com/",
-                            Name = "Hubspot",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Hubspot"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://balsamiq.com/",
-                            Name = "Balsamiq",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Balsamiq"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.adobe.com/",
-                            Name = "Adobe",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Adobe"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.abstract.com/",
-                            Name = "Abstract",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Abstract"
                         },
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.algolia.com/",
-                            Name = "Algolia",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Algolia"
                         },
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://aws.amazon.com/",
-                            Name = "AWS",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "AWS"
                         },
                         new
                         {
                             Id = 11,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.hetzner.com/cloud",
-                            Name = "Hetzner",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Hetzner"
                         },
                         new
                         {
                             Id = 12,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://cloud.google.com/",
-                            Name = "Google Cloud",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Google Cloud"
                         },
                         new
                         {
                             Id = 13,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://azure.microsoft.com/en-us/",
-                            Name = "Azure",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Azure"
                         },
                         new
                         {
                             Id = 14,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.vultr.com/",
-                            Name = "Vultr",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Vultr"
                         },
                         new
                         {
                             Id = 15,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.paypal.com/",
-                            Name = "PayPal",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "PayPal"
                         },
                         new
                         {
                             Id = 16,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.digitalocean.com/",
-                            Name = "Digital Ocean",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Digital Ocean"
                         },
                         new
                         {
                             Id = 17,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.netcup.eu/",
-                            Name = "Netcup",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Netcup"
                         },
                         new
                         {
                             Id = 18,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://stripe.com/",
-                            Name = "Stripe",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Stripe"
                         },
                         new
                         {
                             Id = 19,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://squareup.com/",
-                            Name = "Square",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Square"
                         },
                         new
                         {
                             Id = 20,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://commerce.coinbase.com/",
-                            Name = "Coinbase Commerce",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Coinbase Commerce"
                         },
                         new
                         {
                             Id = 21,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.linode.com/",
-                            Name = "Linode",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Linode"
                         },
                         new
                         {
                             Id = 22,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://mailchimp.com/",
-                            Name = "Mailchimp",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Mailchimp"
                         },
                         new
                         {
                             Id = 23,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.azul.com.do/Pages/es/default.aspx",
-                            Name = "Azul dominicana",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Azul dominicana"
                         },
                         new
                         {
                             Id = 24,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.cardnet.com.do/",
-                            Name = "Cardnet dominicana",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Cardnet dominicana"
                         },
                         new
                         {
                             Id = 25,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.godaddy.com/",
-                            Name = "Godaddy",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Godaddy"
                         },
                         new
                         {
                             Id = 26,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://github.com/",
-                            Name = "Github",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Github"
                         },
                         new
                         {
                             Id = 27,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://about.gitlab.com/",
-                            Name = "Gitlab",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Gitlab"
                         },
                         new
                         {
                             Id = 28,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://vercel.com/",
-                            Name = "Vercel",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Vercel"
                         },
                         new
                         {
                             Id = 29,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.netlify.com/",
-                            Name = "Netifly",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Netifly"
                         },
                         new
                         {
                             Id = 30,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.cloudflare.com/",
-                            Name = "Cloudflare",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Cloudflare"
                         },
                         new
                         {
                             Id = 31,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.figma.com/",
-                            Name = "Figma",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Figma"
                         },
                         new
                         {
                             Id = 32,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://business.facebook.com/",
-                            Name = "Facebook Business",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Facebook Business"
                         },
                         new
                         {
                             Id = 33,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://ads.google.com/home/",
-                            Name = "Google Ads",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Google Ads"
                         },
                         new
                         {
                             Id = 34,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             HomePage = "https://www.intercom.com/",
-                            Name = "Intercom",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Name = "Intercom"
                         });
                 });
 
@@ -569,6 +490,17 @@ namespace ISO810_ERP.Migrations
                     b.Navigation("Organization");
 
                     b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("ISO810_ERP.Models.Organization", b =>
+                {
+                    b.HasOne("ISO810_ERP.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 #pragma warning restore 612, 618
         }

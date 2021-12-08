@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ISO810_ERP.Models;
 
-[Index(nameof(Account), IsUnique = true)]
 public class Organization
 {
     public int Id { get; set; }
-    public long Account { get; set; }
+    public Account Account { get; set; } = default!;
+    public int AccountId { get; set; }
     public string Name { get; set; } = default!;
     public string Alias { get; set; } = default!;
 

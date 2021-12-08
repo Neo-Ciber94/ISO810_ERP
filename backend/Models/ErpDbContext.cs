@@ -38,12 +38,6 @@ public class ErpDbContext : DbContext
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql(GetDateTimeNow);
         });
 
-        modelBuilder.Entity<Service>((entity) =>
-        {
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql(GetDateTimeNow);
-            entity.Property(e => e.UpdatedAt).HasDefaultValueSql(GetDateTimeNow);
-        });
-
         SeedDatabase(modelBuilder);
     }
 
