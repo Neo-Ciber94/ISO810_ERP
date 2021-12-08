@@ -15,6 +15,7 @@ namespace ISO810_ERP.Controllers;
 
 [Authorize]
 [ApiController]
+[Produces("application/json")]
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
 {
@@ -24,28 +25,23 @@ public class AccountController : ControllerBase
         this.accountRepository = accountRepository;
     }
 
+    /// <summary>
+    /// Creates a new account.
+    /// </summary>
+    /// <param name="accountSignup">The new account credentials</param>
+    /// <returns>An api response successful if the account was created, otherwise a failure api response.</returns>
     [AllowAnonymous]
     [HttpPost("signup")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ApiResponse>> Signup(AccountSignup accountSignup)
     {
         var result = await accountRepository.Signup(accountSignup);
-
-        if (result.Success)
-        {
-            return Ok(result);
-        }
-        else
-        {
-            return BadRequest(result);
-        }
+        return Ok(result);
     }
 
     [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(typeof(ApiResponse<AccountDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ApiResponse>> Login(AccountLogin accountLogin)
     {
         var result = await accountRepository.Login(accountLogin);
@@ -54,12 +50,10 @@ public class AccountController : ControllerBase
         {
             var account = (result as ApiResponse<AccountDto>)!.Data;
             HttpContext.SetCookieUserAccount(account);
-            return Ok(result);
+
         }
-        else
-        {
-            return BadRequest(result);
-        }
+
+        return Ok(result);
     }
 
     [HttpPost("logout")]
