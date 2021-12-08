@@ -9,6 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
+            "console": "integratedTerminal",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/backend/bin/Debug/net5.0/ISO810_ERP.dll",
             "args": [],

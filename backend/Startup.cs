@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using dotenv.net;
+using ISO810_ERP.Config;
 using ISO810_ERP.Filters;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories;
@@ -11,6 +13,7 @@ using ISO810_ERP.Repositories.Interfaces;
 using ISO810_ERP.Services;
 using ISO810_ERP.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -20,6 +23,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace ISO810_ERP
@@ -27,13 +31,17 @@ namespace ISO810_ERP
     public class Startup
     {
         const string CorsPolicy = "Everyone";
-        private static readonly bool EnableInMemoryDatabase = Environment.GetEnvironmentVariable("ISO810_ENABLE_IN_MEMORY_DB") == "true";
-        private static readonly bool EnableHttpsRedirection = Environment.GetEnvironmentVariable("ISO810_ENABLE_HTTPS") == "true";
+        private static readonly bool EnableInMemoryDatabase;
+        private static readonly bool EnableHttpsRedirection;
 
         static Startup()
         {
             // Read the .env file from the root of the project
             DotEnv.Load(options: new DotEnvOptions(envFilePaths: new[] { "../.env" }));
+
+            // Initialize the static variables
+            EnableInMemoryDatabase = Environment.GetEnvironmentVariable("ISO810_ENABLE_IN_MEMORY_DB") == "true";
+            EnableHttpsRedirection = Environment.GetEnvironmentVariable("ISO810_ENABLE_HTTPS") == "true";
         }
 
         public Startup(IConfiguration configuration)
@@ -46,6 +54,11 @@ namespace ISO810_ERP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ISO810_ERP", Version = "v1" });
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicy,
@@ -84,11 +97,34 @@ namespace ISO810_ERP
                     options.UseSqlServer(connectionString);
                 }
             });
-            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
-            services.AddSwaggerGen(c =>
+
+            services.AddAuthentication(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ISO810_ERP", Version = "v1" });
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettings.JwtSecret));
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = key,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies[Constants.AuthCookieName];
+                        return Task.CompletedTask;
+                    }
+                };
             });
+
+            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,6 +146,7 @@ namespace ISO810_ERP
                 appBuilder.UseHttpsRedirection();
             });
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

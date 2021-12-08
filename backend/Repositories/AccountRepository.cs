@@ -69,20 +69,6 @@ public class AccountRepository : IAccountRepository
         return Task.FromResult(ApiResponse.Successful());
     }
 
-    public async Task<ApiResponse> Delete(Account account)
-    {
-        var accountToDelete = await context.Accounts.FindAsync(account.Id);
-
-        if (accountToDelete == null)
-        {
-            throw new AppException("Account not found");
-        }
-
-        context.Accounts.Remove(accountToDelete);
-        await context.SaveChangesAsync();
-        return ApiResponse.Successful();
-    }
-
     public async Task<ApiResponse> Update(int id, AccountUpdate account)
     {
         var accountToUpdate = await context.Accounts.FindAsync(id);
@@ -101,6 +87,20 @@ public class AccountRepository : IAccountRepository
         accountToUpdate.Name = account.Name;
         accountToUpdate.Email = account.Email;
 
+        await context.SaveChangesAsync();
+        return ApiResponse.Successful();
+    }
+
+    public async Task<ApiResponse> Delete(int id)
+    {
+        var accountToDelete = await context.Accounts.FindAsync(id);
+
+        if (accountToDelete == null)
+        {
+            throw new AppException("Account not found");
+        }
+
+        context.Accounts.Remove(accountToDelete);
         await context.SaveChangesAsync();
         return ApiResponse.Successful();
     }

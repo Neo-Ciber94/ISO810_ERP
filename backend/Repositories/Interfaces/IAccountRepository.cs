@@ -10,8 +10,8 @@ public interface IAccountRepository
     public Task<ApiResponse> Signup(AccountSignup accountSignup);
     public Task<ApiResponse> Login(AccountLogin accountLogin);
     public Task<ApiResponse> Logout(Account account);
-    public Task<ApiResponse> Delete(Account account);
     public Task<ApiResponse> Update(int id, AccountUpdate account);
+    public Task<ApiResponse> Delete(int id);
     public Task<Account?> GetAccountById(int id);
     public Task<Account?> GetAccountByEmail(string email);
 }
