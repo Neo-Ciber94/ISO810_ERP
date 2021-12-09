@@ -1,10 +1,15 @@
 
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ISO810_ERP.Dtos;
+using ISO810_ERP.Extensions;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories.Interfaces;
+using ISO810_ERP.Utils;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
 namespace ISO810_ERP.Repositories;
@@ -19,7 +24,6 @@ public class OrganizationRepository : IOrganizationRepository
         this.context = context;
         this.mapper = mapper;
     }
-
 
     public IQueryable<OrganizationDto> GetAll()
     {
@@ -40,15 +44,35 @@ public class OrganizationRepository : IOrganizationRepository
         return mapper.Map<OrganizationDto>(organization);
     }
 
-
-    public async Task<OrganizationDto> Create(OrganizationCreate organization)
+    public async Task<OrganizationDto> Create(int accountId, OrganizationInput organization)
     {
         var organizationEntity = mapper.Map<Organization>(organization);
+        organizationEntity.AccountId = accountId;
 
-        context.Organizations.Add(organizationEntity);
+        var result = context.Organizations.Add(organizationEntity);
         await context.SaveChangesAsync();
 
-        return mapper.Map<OrganizationDto>(organizationEntity);
+        return mapper.Map<OrganizationDto>(result.Entity);
+    }
+
+    public async Task<OrganizationDto?> Update(int accountId, int organizationId, OrganizationInput organization)
+    {
+        var organizationToUpdate = await context.Organizations
+            .Where(o => o.Id == organizationId && o.AccountId == accountId)
+            .FirstOrDefaultAsync();
+
+        if (organizationToUpdate == null)
+        {
+            return null;
+        }
+
+        ObjectUtils.UpdateNonNullProperties(organization, organizationToUpdate);
+        var result = context.Update(organizationToUpdate);
+
+        Trace.WriteLine(organizationToUpdate.ToJson());
+
+        await context.SaveChangesAsync();
+        return mapper.Map<OrganizationDto>(result.Entity);
     }
 
     public async Task<OrganizationDto?> Delete(int accountId, int organizationId)
@@ -66,21 +90,5 @@ public class OrganizationRepository : IOrganizationRepository
         await context.SaveChangesAsync();
 
         return mapper.Map<OrganizationDto>(organizationToDelete);
-    }
-
-    public async Task<OrganizationDto?> Update(int accountId, int organizationId, OrganizationUpdate organization)
-    {
-        var organizationToUpdate = await context.Organizations
-            .Where(o => o.Id == organizationId && o.AccountId == accountId)
-            .FirstOrDefaultAsync();
-
-        if (organizationToUpdate == null)
-        {
-            return null;
-        }
-
-        mapper.Map(organization, organizationToUpdate);
-        await context.SaveChangesAsync();
-        return mapper.Map<OrganizationDto>(organizationToUpdate);
     }
 }

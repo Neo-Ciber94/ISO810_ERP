@@ -12,6 +12,7 @@ namespace ISO810_ERP.Profiles
             CreateMap<Account, AccountDto>();
             CreateMap<Expense, ExpenseDto>().ReverseMap();
             CreateMap<Organization, OrganizationDto>().ReverseMap();
+            CreateMap<OrganizationInput, Organization>();
         }
     }
 }
