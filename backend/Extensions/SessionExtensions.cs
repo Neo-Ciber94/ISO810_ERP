@@ -1,0 +1,31 @@
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+
+namespace ISO810_ERP.Extensions;
+
+public static class SessionExtensions
+{
+    public static void Set<T>(this ISession session, string key, T value)
+    {
+        session.SetString(key, JsonSerializer.Serialize(value));
+    }
+
+    public static T? GetOrNull<T>(this ISession session, string key)
+    {
+        var value = session.GetString(key);
+
+        if (value == null)
+        {
+            return default;
+        }
+
+        try
+        {
+            return JsonSerializer.Deserialize<T>(value)!;
+        }
+        catch
+        {
+            return default;
+        }
+    }
+}
