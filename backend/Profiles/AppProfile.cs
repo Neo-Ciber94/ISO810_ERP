@@ -10,6 +10,8 @@ namespace ISO810_ERP.Profiles
         public AppProfile()
         {
             CreateMap<Account, AccountDto>();
+            CreateMap<Expense, ExpenseDto>().ReverseMap();
+            CreateMap<Organization, OrganizationDto>().ReverseMap();
         }
     }
 }
