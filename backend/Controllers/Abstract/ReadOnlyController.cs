@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using ISO810_ERP.Extensions;
 using ISO810_ERP.Repositories.Interfaces;
 using ISO810_ERP.Utils;
@@ -11,29 +12,74 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ISO810_ERP.Controllers.Abstract;
 
-public abstract class ReadOnlyController<TEntity> : ControllerBase where TEntity : class
+public abstract class ReadOnlyController<TEntity> : ReadOnlyController<TEntity, TEntity> where TEntity : class
+{
+    protected ReadOnlyController(IReadOnlyRepository<TEntity> repository, IMapper mapper) : base(repository, mapper) { }
+}
+
+public abstract class ReadOnlyController<TEntity, TDto> : ControllerBase where TEntity : class
 {
     private readonly IReadOnlyRepository<TEntity> repository;
+    private readonly IMapper mapper;
 
-    public ReadOnlyController(IReadOnlyRepository<TEntity> repository)
+    protected ReadOnlyController(IReadOnlyRepository<TEntity> repository, IMapper mapper)
     {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     [HttpGet]
-    public virtual async Task<ActionResult<IEnumerable<TEntity>>> GetAll()
+    public virtual async Task<ActionResult<IEnumerable<TDto>>> GetAll()
     {
         var result = await repository.GetAll().ToListAsync();
+
+        if (typeof(TEntity) != typeof(TDto))
+        {
+            var mappedResult = mapper.Map<IEnumerable<TDto>>(result);
+            return Ok(mappedResult);
+        }
+
         return Ok(result);
     }
 
     [HttpGet("query")]
-    public virtual async Task<ActionResult<PaginationResult<TEntity>>> Query([FromQuery] PaginationQuery query)
+    public virtual async Task<ActionResult<PaginationResult<TDto>>> Query([FromQuery] PaginationQuery query)
+    {
+        IQueryable<TEntity> queryable = repository.GetAll();
+        var result = await Paginate(queryable, query);
+
+        if (typeof(TEntity) != typeof(TDto))
+        {
+            var mappedResult = result.Map((items) => mapper.Map<IEnumerable<TDto>>(items));
+            return Ok(mappedResult);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    public virtual async Task<ActionResult<TDto>> GetById(int id)
+    {
+        var result = await repository.GetById(id);
+
+        if (result == null)
+        {
+            return NotFound();
+        }
+
+        if (typeof(TEntity) != typeof(TDto))
+        {
+            var mappedResult = mapper.Map<TDto>(result);
+            return Ok(mappedResult);
+        }
+
+        return Ok(result);
+    }
+
+    protected async Task<PaginationResult<TEntity>> Paginate(IQueryable<TEntity> queryable, PaginationQuery query)
     {
         int page = Math.Max(1, query.Page.GetValueOrDefault(1));
         int pageSize = Math.Max(1, query.PageSize.GetValueOrDefault(10));
-
-        IQueryable<TEntity> queryable = repository.GetAll();
 
         if (query.Sort != null)
         {
@@ -78,19 +124,6 @@ public abstract class ReadOnlyController<TEntity> : ControllerBase where TEntity
             HasPreviousPage = page > 1
         };
 
-        return Ok(pageResult);
-    }
-
-    [HttpGet("{id}")]
-    public virtual async Task<ActionResult<TEntity>> GetById(int id)
-    {
-        var result = await repository.GetById(id);
-
-        if (result == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(result);
+        return pageResult;
     }
 }

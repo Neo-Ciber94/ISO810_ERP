@@ -13,4 +13,18 @@ public class PaginationResult<T>
     public bool HasPreviousPage { get; set; }
     public bool HasNextPage { get; set; }
     public IEnumerable<T> Items { get; set; } = Array.Empty<T>();
+
+    public PaginationResult<TResult> Map<TResult>(Func<IEnumerable<T>, IEnumerable<TResult>> mapper)
+    {
+        return new PaginationResult<TResult>
+        {
+            Page = Page,
+            PageSize = PageSize,
+            TotalPages = TotalPages,
+            TotalCount = TotalCount,
+            HasPreviousPage = HasPreviousPage,
+            HasNextPage = HasNextPage,
+            Items = mapper(Items)
+        };
+    }
 }
