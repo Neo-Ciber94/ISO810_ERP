@@ -73,7 +73,7 @@ public class OrganizationController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(OrganizationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<OrganizationDto>> Create(OrganizationInput organizationDto)
+    public async Task<ActionResult<OrganizationDto>> Create(OrganizationCreate organizationDto)
     {
         var currentAccount = HttpContext.GetCookieUserAccount();
 
@@ -102,7 +102,7 @@ public class OrganizationController : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(OrganizationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<OrganizationDto>> Update(int id, OrganizationInput organizationDto)
+    public async Task<ActionResult<OrganizationDto>> Update(int id, OrganizationUpdate organizationDto)
     {
         var currentAccount = HttpContext.GetCookieUserAccount();
 
