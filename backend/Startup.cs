@@ -90,6 +90,7 @@ namespace ISO810_ERP
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<TypedCache>();
             services.AddAutoMapper(typeof(Startup));
 
