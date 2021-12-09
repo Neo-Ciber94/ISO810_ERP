@@ -41,7 +41,7 @@ public class ErpDbContext : DbContext
         SeedDatabase(modelBuilder);
     }
 
-    private void SeedDatabase(ModelBuilder modelBuilder)
+    private static void SeedDatabase(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Currency>().HasData(new[]
         {
