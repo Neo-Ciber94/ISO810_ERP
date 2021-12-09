@@ -116,16 +116,7 @@ public class AccountRepository : IAccountRepository
             account.PasswordHash = passwordHasher.HashPassword(accountUpdate.Password);
         }
 
-        if (accountUpdate.Name != null)
-        {
-            account.Name = accountUpdate.Name;
-        }
-
-        if (accountUpdate.Email != null)
-        {
-            account.Email = accountUpdate.Email;
-        }
-
+        ObjectUtils.UpdateNonNullProperties(accountUpdate, account);
         await context.SaveChangesAsync();
         return ApiResponse.Successful();
     }

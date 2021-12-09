@@ -18,6 +18,7 @@ public class Account
     [MinLength(Constants.MinNameLength)]
     public string Email { get; set; } = default!;
     
+    [MinLength(Constants.MinPasswordHashLength)]
     public string PasswordHash { get; set; } = default!;
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

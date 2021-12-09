@@ -10,4 +10,6 @@ public static class Constants
     public const int MinSymbolLength = 1;
 
     public const int MinPasswordLength = 4;
+
+    public const int MinPasswordHashLength = 10;
 }
