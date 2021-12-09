@@ -92,11 +92,11 @@ public class ExpenseController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("{organizationId}")]
+    [HttpPost()]
     [ProducesResponseType(typeof(ExpenseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Expense>> Create(int organizationId, [FromBody] ExpenseCreate expense)
+    public async Task<ActionResult<Expense>> Create(ExpenseCreate expense)
     {
         var currentAccount = HttpContext.GetCookieUserAccount();
 
@@ -104,8 +104,6 @@ public class ExpenseController : ControllerBase
         {
             return NotFound();
         }
-
-        expense.OrganizationId = organizationId;
 
         var result = await expenseRepository.Create(currentAccount.Id, expense);
 

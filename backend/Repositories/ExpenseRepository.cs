@@ -85,7 +85,7 @@ public class ExpenseRepository : IExpenseRepository
             throw new AppException("Expense not found");
         }
 
-        ObjectUtils.UpdateNonNullProperties(expense, expenseUpdate);
+        ObjectUtils.UpdateNonNullProperties(expenseUpdate, expense);
         await context.SaveChangesAsync();
 
         return mapper.Map<ExpenseDto>(expense);
