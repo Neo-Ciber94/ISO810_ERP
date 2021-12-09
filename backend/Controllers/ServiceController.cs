@@ -11,7 +11,9 @@ namespace ISO810_ERP.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class CurrencyController : ReadOnlyController<Currency>
+public class ServiceController : ReadOnlyController<Service>
 {
-    public CurrencyController(ICurrencyRepository currencyRepository, IMapper mapper) : base(currencyRepository, mapper) { }
+    public ServiceController(IServiceRepository repository, IMapper mapper) : base(repository, mapper)
+    {
+    }
 }

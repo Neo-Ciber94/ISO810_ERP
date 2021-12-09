@@ -17,6 +17,7 @@ using ISO810_ERP.Services;
 using ISO810_ERP.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +37,7 @@ namespace ISO810_ERP
         const string CorsPolicy = "Everyone";
         private static readonly bool EnableInMemoryDatabase;
         private static readonly bool EnableHttpsRedirection;
+        private static readonly bool EnableAuthorization;
 
         static Startup()
         {
@@ -45,6 +47,7 @@ namespace ISO810_ERP
             // Initialize the static variables
             EnableInMemoryDatabase = Environment.GetEnvironmentVariable("ISO810_ENABLE_IN_MEMORY_DB") == "true";
             EnableHttpsRedirection = Environment.GetEnvironmentVariable("ISO810_ENABLE_HTTPS") == "true";
+            EnableAuthorization = Environment.GetEnvironmentVariable("ISO810_ENABLE_AUTHORIZATION") == "true";
         }
 
         public Startup(IConfiguration configuration)
@@ -91,6 +94,7 @@ namespace ISO810_ERP
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<TypedCache>();
             services.AddAutoMapper(typeof(Startup));
 
@@ -141,11 +145,20 @@ namespace ISO810_ERP
             });
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                if (env.IsDevelopment() && !EnableAuthorization)
+                {
+                    Console.WriteLine("WARNING: Authorization is disabled. This is for development only.");
+                    endpoints.MapControllers().WithMetadata(new AllowAnonymousAttribute());
+                }
+                else
+                {
+                    endpoints.MapControllers();
+                }
             });
         }
     }

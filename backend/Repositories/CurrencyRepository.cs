@@ -19,8 +19,8 @@ public class CurrencyRepository : ICurrencyRepository
         return context.Currencies;
     }
 
-    public async Task<Currency?> GetById(int id)
+    public ValueTask<Currency?> GetById(int id)
     {
-        return await context.Currencies.FindAsync(id);
+        return context.Currencies.FindAsync(id);
     }
 }
