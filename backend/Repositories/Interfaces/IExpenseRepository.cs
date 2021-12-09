@@ -18,7 +18,7 @@ namespace ISO810_ERP.Repositories.Interfaces
 
         public Task<ExpenseDto> Create(int accountId, ExpenseCreate expense);
 
-        public Task<ExpenseDto> Update(int accountId, ExpenseUpdate expense);
+        public Task<ExpenseDto> Update(int accountId, int expenseId, ExpenseUpdate expense);
 
         public Task<ExpenseDto> Delete(int accountId, int expenseId);
     }

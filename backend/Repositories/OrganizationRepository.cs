@@ -67,10 +67,9 @@ public class OrganizationRepository : IOrganizationRepository
         }
 
         ObjectUtils.UpdateNonNullProperties(organization, organizationToUpdate);
-        var result = context.Update(organizationToUpdate);
 
         await context.SaveChangesAsync();
-        return mapper.Map<OrganizationDto>(result.Entity);
+        return mapper.Map<OrganizationDto>(organizationToUpdate);
     }
 
     public async Task<OrganizationDto?> Delete(int accountId, int organizationId)

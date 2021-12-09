@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ISO810_ERP.Dtos;
+using ISO810_ERP.Exceptions;
 using ISO810_ERP.Models;
 using ISO810_ERP.Repositories.Interfaces;
+using ISO810_ERP.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace ISO810_ERP.Repositories;
@@ -54,18 +56,55 @@ public class ExpenseRepository : IExpenseRepository
             .SingleOrDefaultAsync();
     }
 
-    public Task<ExpenseDto> Create(int accountId, ExpenseCreate expense)
+    public async Task<ExpenseDto> Create(int accountId, ExpenseCreate expenseCreate)
     {
-        throw new NotImplementedException();
+        var organization = await context.Organizations.FirstOrDefaultAsync(o => o.AccountId == accountId && o.Id == expenseCreate.OrganizationId);
+
+        if (organization == null)
+        {
+            throw new AppException("Organization not found");
+        }
+
+        var expense = mapper.Map<Expense>(expenseCreate);
+        expense.Organization = organization;
+
+        context.Expenses.Add(expense);
+        await context.SaveChangesAsync();
+
+        return mapper.Map<ExpenseDto>(expense);
     }
 
-    public Task<ExpenseDto> Update(int accountId, ExpenseUpdate expense)
+    public async Task<ExpenseDto> Update(int accountId, int expenseId, ExpenseUpdate expenseUpdate)
     {
-        throw new NotImplementedException();
+        var expense = await context.Expenses
+            .Include(e => e.Organization)
+            .FirstOrDefaultAsync(e => e.Id == expenseId && e.Organization.AccountId == accountId);
+
+        if (expense == null)
+        {
+            throw new AppException("Expense not found");
+        }
+
+        ObjectUtils.UpdateNonNullProperties(expense, expenseUpdate);
+        await context.SaveChangesAsync();
+
+        return mapper.Map<ExpenseDto>(expense);
     }
 
-    public Task<ExpenseDto> Delete(int accountId, int expenseId)
+    public async Task<ExpenseDto> Delete(int accountId, int expenseId)
     {
-        throw new NotImplementedException();
+        var expense = await context.Expenses
+            .Include(e => e.Organization)
+            .FirstOrDefaultAsync(e => e.Id == expenseId && e.Organization.AccountId == accountId);
+
+        if (expense == null)
+        {
+            throw new AppException("Expense not found");
+        }
+
+        context.Expenses.Remove(expense);
+        await context.SaveChangesAsync();
+
+        return mapper.Map<ExpenseDto>(expense);
     }
 }
