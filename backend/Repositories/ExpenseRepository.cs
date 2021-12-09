@@ -1,4 +1,5 @@
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -18,6 +19,16 @@ public class ExpenseRepository : IExpenseRepository
     {
         this.context = context;
         this.mapper = mapper;
+    }
+
+    public IQueryable<ExpenseCategory> GetCategories()
+    {
+        return context.ExpenseCategories;
+    }
+
+    public ValueTask<ExpenseCategory?> GetCategoryById(int id)
+    {
+        return context.ExpenseCategories.FindAsync(id);
     }
 
     public IQueryable<ExpenseDto>? GetAll(int account, int organizationId)
@@ -43,13 +54,18 @@ public class ExpenseRepository : IExpenseRepository
             .SingleOrDefaultAsync();
     }
 
-    public IQueryable<ExpenseCategory> GetCategories()
+    public Task<ExpenseDto> Create(int accountId, ExpenseCreate expense)
     {
-        return context.ExpenseCategories;
+        throw new NotImplementedException();
     }
 
-    public ValueTask<ExpenseCategory?> GetCategoryById(int id)
+    public Task<ExpenseDto> Update(int accountId, ExpenseUpdate expense)
     {
-        return context.ExpenseCategories.FindAsync(id);
+        throw new NotImplementedException();
+    }
+
+    public Task<ExpenseDto> Delete(int accountId, int expenseId)
+    {
+        throw new NotImplementedException();
     }
 }
