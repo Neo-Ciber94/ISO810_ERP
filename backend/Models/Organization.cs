@@ -3,7 +3,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ISO810_ERP.Config;
-using Microsoft.EntityFrameworkCore;
 
 namespace ISO810_ERP.Models;
 
