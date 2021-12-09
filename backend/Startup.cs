@@ -94,6 +94,8 @@ namespace ISO810_ERP
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IExpenseRepository, ExpenseRepository>();
             services.AddScoped<TypedCache>();
             services.AddAutoMapper(typeof(Startup));
 

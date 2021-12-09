@@ -7,3 +7,10 @@ export interface Organization {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface OrganizationCreate {
+    name: string;
+    alias: string;
+}
+
+export type OrganizationUpdate = Partial<OrganizationCreate>;
