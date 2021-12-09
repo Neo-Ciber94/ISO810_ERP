@@ -45,6 +45,11 @@ public class AccountRepository : IAccountRepository
             return ApiResponse.Failure("Invalid email format");
         }
 
+        if (string.IsNullOrWhiteSpace(accountSignup.Password))
+        {
+            return ApiResponse.Failure("Password is required and cannot be empty");
+        }
+
         var account = new Account
         {
             Name = accountSignup.Name,
@@ -86,34 +91,39 @@ public class AccountRepository : IAccountRepository
         return Task.FromResult(ApiResponse.Successful());
     }
 
-    public async Task<ApiResponse> Update(int id, AccountUpdate account)
+    public async Task<ApiResponse> Update(int id, AccountUpdate accountUpdate)
     {
-        var accountToUpdate = await context.Accounts.FindAsync(id);
+        var account = await context.Accounts.FindAsync(id);
 
-        if (accountToUpdate == null)
+        if (account == null)
         {
             throw new AppException("Account not found");
         }
 
-        if (account.Email != null && RegexUtils.IsValidEmail(account.Email) == false)
+        if (accountUpdate.Email != null && RegexUtils.IsValidEmail(accountUpdate.Email) == false)
         {
             return ApiResponse.Failure("Invalid email format");
         }
 
         // Change the password if the update contains a new password
-        if (account.Password != null)
+        if (accountUpdate.Password != null)
         {
-            accountToUpdate.PasswordHash = passwordHasher.HashPassword(account.Password);
+            if (string.IsNullOrWhiteSpace(accountUpdate.Password))
+            {
+                return ApiResponse.Failure("Password is required and cannot be empty");
+            }
+
+            account.PasswordHash = passwordHasher.HashPassword(accountUpdate.Password);
         }
 
-        if (account.Name != null)
+        if (accountUpdate.Name != null)
         {
-            accountToUpdate.Name = account.Name;
+            account.Name = accountUpdate.Name;
         }
 
-        if (account.Email != null)
+        if (accountUpdate.Email != null)
         {
-            accountToUpdate.Email = account.Email;
+            account.Email = accountUpdate.Email;
         }
 
         await context.SaveChangesAsync();
