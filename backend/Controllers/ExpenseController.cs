@@ -32,7 +32,6 @@ public class ExpenseController : ControllerBase
         return Ok(result);
     }
 
-
     [HttpGet("category/{id}")]
     [ProducesResponseType(typeof(IEnumerable<ExpenseCategory>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
