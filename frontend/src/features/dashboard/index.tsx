@@ -1,7 +1,7 @@
 export const DashboardPage = () => {
   return (
     <>
-      <h1>MMG DASHBOARD</h1>
+      <h1>DASHBOARD</h1>
     </>
   );
 };

@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Loading from "./app/components/layout/components/Loading";
+import ProtectedRoute from "./ProtectedRoute";
 
 const HomePage = lazy(() => {
   return import("./pages/home");
@@ -27,7 +28,9 @@ const AppRoutes = () => {
         path="dashboard"
         element={
           <Suspense fallback={<Loading />}>
-            <DashboardPage />
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
           </Suspense>
         }
       />

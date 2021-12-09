@@ -17,7 +17,7 @@ const config: AppContextType = {
     id: 0,
     name: "",
     email: "",
-    isAuthenticated: false,
+    isAuthenticated: true,
   },
   updateUserData: () => {},
 };
@@ -25,8 +25,8 @@ const config: AppContextType = {
 export const AppContext = createContext<AppContextType>(config);
 
 export const AppContextProvider: FC = ({ children }) => {
-  const [user, updateUserData] = useState<AppContextType>(config);
-  const value: any = useMemo(() => ({ user, updateUserData }), [user]);
+  const [context, updateUserData] = useState<AppContextType>(config);
+  const value: any = useMemo(() => ({ context, updateUserData }), [context]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
