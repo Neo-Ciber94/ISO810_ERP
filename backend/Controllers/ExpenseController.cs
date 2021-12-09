@@ -94,6 +94,7 @@ public class ExpenseController : ControllerBase
 
     [HttpPost("{organizationId}")]
     [ProducesResponseType(typeof(ExpenseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Expense>> Create(int organizationId, [FromBody] ExpenseCreate expense)
     {
