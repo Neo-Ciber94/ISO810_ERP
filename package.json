@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "dotnet watch run --project ./backend",
-    "dev:client": "npm run start --prefix ./frontend"
+    "dev:server": "cd backend && dotnet watch run",
+    "dev:client": "cd frontend && npm run start"
   },
   "author": "",
   "license": "ISC",
