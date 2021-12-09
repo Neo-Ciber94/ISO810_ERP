@@ -44,7 +44,7 @@ public class OrganizationRepository : IOrganizationRepository
         return mapper.Map<OrganizationDto>(organization);
     }
 
-    public async Task<OrganizationDto> Create(int accountId, OrganizationInput organization)
+    public async Task<OrganizationDto> Create(int accountId, OrganizationCreate organization)
     {
         var organizationEntity = mapper.Map<Organization>(organization);
         organizationEntity.AccountId = accountId;
@@ -55,7 +55,7 @@ public class OrganizationRepository : IOrganizationRepository
         return mapper.Map<OrganizationDto>(result.Entity);
     }
 
-    public async Task<OrganizationDto?> Update(int accountId, int organizationId, OrganizationInput organization)
+    public async Task<OrganizationDto?> Update(int accountId, int organizationId, OrganizationUpdate organization)
     {
         var organizationToUpdate = await context.Organizations
             .Where(o => o.Id == organizationId && o.AccountId == accountId)
@@ -68,8 +68,6 @@ public class OrganizationRepository : IOrganizationRepository
 
         ObjectUtils.UpdateNonNullProperties(organization, organizationToUpdate);
         var result = context.Update(organizationToUpdate);
-
-        Trace.WriteLine(organizationToUpdate.ToJson());
 
         await context.SaveChangesAsync();
         return mapper.Map<OrganizationDto>(result.Entity);
