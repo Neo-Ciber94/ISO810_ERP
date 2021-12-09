@@ -7,5 +7,5 @@ namespace ISO810_ERP.Repositories.Interfaces;
 public interface IReadOnlyRepository<TEntity> where TEntity : class
 {
     IQueryable<TEntity> GetAll();
-    Task<TEntity?> GetById(int id);
+    ValueTask<TEntity?> GetById(int id);
 }
