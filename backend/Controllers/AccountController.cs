@@ -39,6 +39,11 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Login using the account credentials.
+    /// </summary>
+    /// <param name="accountLogin">Credentials to login</param>
+    /// <returns>The logged account and set jwt cookies for auth.</returns>
     [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(typeof(ApiResponse<AccountDto>), StatusCodes.Status200OK)]
@@ -56,6 +61,10 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Logout the current logged account.
+    /// </summary>
+    /// <returns></returns>
     [HttpPost("logout")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -79,6 +88,10 @@ public class AccountController : ControllerBase
         return NotFound();
     }
 
+    /// <summary>
+    /// Returns information about the current account.
+    /// </summary>
+    /// <returns>Information about this account.</returns>
     [HttpGet("me")]
     [ProducesResponseType(typeof(AccountDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -95,6 +108,11 @@ public class AccountController : ControllerBase
         return NotFound();
     }
 
+    /// <summary>
+    /// Updates this account information.
+    /// </summary>
+    /// <param name="accountUpdate">The information to update.</param>
+    /// <returns>A successful api response if the account was updated, otherwise a failure.</returns>
     [HttpPut("update")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -111,6 +129,10 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Delete the current account.
+    /// </summary>
+    /// <returns>A succesful api response if was deleted otherwise a failure.</returns>
     [HttpDelete("delete")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
