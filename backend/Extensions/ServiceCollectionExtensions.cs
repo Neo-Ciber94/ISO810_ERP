@@ -16,6 +16,7 @@ public static class ServiceCollectionExtensions
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(options =>
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettings.JwtSecret));

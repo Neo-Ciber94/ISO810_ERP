@@ -21,11 +21,7 @@ namespace ISO810_ERP
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseKestrel()
-                        .UseContentRoot(Directory.GetCurrentDirectory())
-                        .UseUrls("http://+:80")
-                        .UseIISIntegration()
-                        .UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }

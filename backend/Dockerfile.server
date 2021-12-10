@@ -1,7 +1,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
 WORKDIR /app
-EXPOSE 80
+EXPOSE 5000
+ENV LOGGING__CONSOLE__FORMATTERNAME=Simple
 
 COPY ./bin/Publish/net6.0/ ./
-ENTRYPOINT ["dotnet run", "ISO810_ERP.dll"]
+ENTRYPOINT ["dotnet", "ISO810_ERP.dll"]
