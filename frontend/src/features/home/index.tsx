@@ -32,7 +32,7 @@ const defaultData: formDataProps = {
 };
 
 export const HomePage = () => {
-  const { context, updateUserData } = useAppContext();
+  const { updateUserData } = useAppContext();
   const [formStatus, updateFormStatus] = useState<formType>(0);
   const [formData, updateFormData] = useState<formDataProps>(defaultData);
   const [isLoadingRequest, updateLoadingRequestStatus] =
@@ -151,9 +151,6 @@ export const HomePage = () => {
             {formStatus === formType.Login
               ? "¡Inicia sesión!"
               : "¡Registrar cuenta!"}
-          </Typography>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
-            {context ? JSON.stringify(context) : null}
           </Typography>
 
           {formStatus === formType.Register && (

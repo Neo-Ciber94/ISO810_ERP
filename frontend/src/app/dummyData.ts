@@ -24,6 +24,32 @@ export const currencies = [
     symbol: "£",
   },
 ];
+export const ExpenseCategory = [
+  {
+    id: 1,
+    name: "Customer Support",
+  },
+  {
+    id: 2,
+    name: "Development / R&D",
+  },
+  {
+    id: 3,
+    name: "Marketing",
+  },
+  {
+    id: 4,
+    name: "Ops",
+  },
+  {
+    id: 5,
+    name: "Web Hosting",
+  },
+  {
+    id: 6,
+    name: "Productivity",
+  },
+];
 
 export const Services = [
   {

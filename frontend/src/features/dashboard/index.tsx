@@ -9,6 +9,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import CircularProgress from "@mui/material/CircularProgress";
+import ActivityCard from "../../app/components/cards/ActivityCard";
 
 import * as Models from "../../models/index";
 
@@ -124,7 +125,9 @@ export const DashboardPage = () => {
         )}
 
         {activityData.Expenses.length ? (
-          activityData.Expenses.map((expense) => <h1>exptense</h1>)
+          activityData.Expenses.map((expense) => (
+            <ActivityCard key={expense.id} {...expense} />
+          ))
         ) : (
           <Typography
             variant="h6"
