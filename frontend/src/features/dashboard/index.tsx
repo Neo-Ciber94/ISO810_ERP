@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { axiosInstance } from "../../app/config";
 
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
@@ -7,6 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import * as Models from "../../models/index";
 
@@ -24,16 +26,54 @@ export const DashboardPage = () => {
     Expenses: [],
   });
 
-  const [loadingData, updateLoadingData] = useState({
-    isLoadingOrganizations: true,
-    isLoadingExpenses: true,
-  });
+  const [isLoadingExpenses, updateLoadingData] = useState<boolean>(false);
 
-  useEffect(() => {}, []);
+  const GetOrganizations = () => {
+    axiosInstance.get("/Organization").then((response) => {
+      const { data } = response;
 
-  const GetOrganizations = () => {};
+      updateActivityData({
+        ...activityData,
+        Organizations: data,
+        Expenses: [],
+      });
+    });
+  };
 
-  const GetExpenses = () => {};
+  const onChangeOrg = (value: any) => {
+    updateSelectedOrganization(parseInt(value));
+    updateActivityData({
+      ...activityData,
+      Expenses: [],
+    });
+  };
+
+  const GetExpenses = () => {
+    axiosInstance
+      .get("/Expense/" + selectedOrganization)
+      .then((response) => {
+        const { data } = response;
+        updateLoadingData(false);
+        updateActivityData({
+          ...activityData,
+          Expenses: data,
+        });
+      })
+      .catch(() => {
+        updateLoadingData(false);
+      });
+  };
+
+  useEffect(() => {
+    GetOrganizations();
+  }, []);
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      updateLoadingData(true);
+      GetExpenses();
+    }
+  }, [selectedOrganization]);
 
   return (
     <Grid container>
@@ -54,22 +94,50 @@ export const DashboardPage = () => {
         }}
       >
         <Grid item container sx={{ marginY: 2 }}>
-          <FormControl fullWidth disabled={loadingData.isLoadingOrganizations}>
+          <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Organización</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={10}
+              value={selectedOrganization}
               label="Organización"
+              onChange={(e) => {
+                onChangeOrg(e.target.value);
+              }}
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value={0}>Selecciona una organización</MenuItem>
+              {activityData.Organizations.map((Organization) => {
+                const { id, alias } = Organization;
+                return (
+                  <MenuItem key={id} value={id}>
+                    {alias}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </Grid>
         <Divider sx={{ marginBottom: 2, width: "100%" }} />
-        asdad
+
+        {isLoadingExpenses && (
+          <Grid container item justifyContent="center" alignItems="center">
+            <CircularProgress />
+          </Grid>
+        )}
+
+        {activityData.Expenses.length ? (
+          activityData.Expenses.map((expense) => <h1>exptense</h1>)
+        ) : (
+          <Typography
+            variant="h6"
+            color="textSecondary"
+            align="center"
+            sx={{ width: "100%" }}
+            gutterBottom
+          >
+            {selectedOrganization
+              ? "No hay actividad disponible"
+              : "Debes seleccionar una organización"}
+          </Typography>
+        )}
       </Grid>
     </Grid>
   );
