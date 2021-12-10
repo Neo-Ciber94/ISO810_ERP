@@ -14,6 +14,10 @@ const DashboardPage = lazy(() => {
   return import("./pages/dashboard");
 });
 
+const ActivityPage = lazy(() => {
+  return import("./pages/activity");
+});
+
 const AppRoutes = () => {
   const { updateUserData } = useAppContext();
 
@@ -49,6 +53,17 @@ const AppRoutes = () => {
           <Suspense fallback={<Loading />}>
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          </Suspense>
+        }
+      />
+
+      <Route
+        path="activity"
+        element={
+          <Suspense fallback={<Loading />}>
+            <ProtectedRoute>
+              <ActivityPage />
             </ProtectedRoute>
           </Suspense>
         }

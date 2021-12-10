@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../app/config";
 
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -19,6 +21,7 @@ interface DashboardDataProps {
 }
 
 export const DashboardPage = () => {
+  const navigate = useNavigate();
   const [selectedOrganization, updateSelectedOrganization] =
     useState<number>(0);
 
@@ -78,9 +81,27 @@ export const DashboardPage = () => {
 
   return (
     <Grid container>
-      <Typography gutterBottom variant="h5" fontWeight={500}>
-        Actividad
-      </Typography>
+      <Grid
+        container
+        item
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ marginBottom: 2 }}
+      >
+        <Typography gutterBottom variant="h5" fontWeight={500}>
+          Actividad
+        </Typography>
+
+        <Button
+          variant="contained"
+          onClick={() => {
+            navigate("/activity");
+          }}
+        >
+          Agregar actividad
+        </Button>
+      </Grid>
 
       <Grid
         container
