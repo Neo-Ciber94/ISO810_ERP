@@ -176,6 +176,7 @@ export const ActivityPage = () => {
               </MenuItem>
               {formOptions.services.map((service) => {
                 const { id, name } = service;
+                if (!id) return null;
                 return (
                   <MenuItem key={id} value={id}>
                     {name}

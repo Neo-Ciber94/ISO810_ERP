@@ -1,11 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { Services, currencies } from "../../../dummyData";
 import { axiosInstance } from "../../../config";
-import { thousands_separators } from "../../../functions";
 
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
-import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -13,14 +10,13 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import * as Models from "../../../../models";
 
-const ActivityCard = ({
+const OrganizationCard = ({
   id,
-  organizationId,
-  serviceId,
-  currencyId,
-  amount,
+  accountId,
+  name,
+  alias,
   createdAt,
-}: Models.Expense) => {
+}: Models.Organization) => {
   const navigate = useNavigate();
   const date: any = new Date(`${createdAt?.toString()}`);
   const datestring =
@@ -34,11 +30,15 @@ const ActivityCard = ({
     ":" +
     date.getMinutes();
 
-  const activityDelete = () => {
-    if (window.confirm("¿Estas seguro que deseas borrar esta actividad?")) {
-      axiosInstance.delete("/Expense/" + id).then((response) => {
-        alert("¡Actividad eliminada exitosamente!");
-        window.location.reload();
+  const organizationDelete = () => {
+    if (
+      window.confirm(
+        "¿Estas seguro que deseas borrar esta organización? \nAl borrar esta organización también borrará todas las actividades relacionadas a esta entidad."
+      )
+    ) {
+      axiosInstance.delete("/Organization/" + id).then((response) => {
+        alert("Organización eliminada exitosamente!");
+        navigate("/dashboard");
       });
     }
   };
@@ -58,20 +58,14 @@ const ActivityCard = ({
       }}
     >
       <Grid container item xs={6} alignItems="center">
-        <Avatar sx={{ bgcolor: "#1769aa" }} variant="rounded">
-          {Services[serviceId].name.slice(0, 1)}
+        <Avatar sx={{ bgcolor: "#482880" }} variant="rounded">
+          {name.slice(0, 1)}
         </Avatar>
 
         <Grid sx={{ marginLeft: 1, display: "flex", flexDirection: "column" }}>
-          <Typography fontWeight={500}>{Services[serviceId].name}</Typography>
-          <Typography
-            color="textSecondary"
-            sx={{ cursor: "pointer", fontSize: 12 }}
-            onClick={() => {
-              window.open(Services[serviceId].homePage);
-            }}
-          >
-            {Services[serviceId].homePage}
+          <Typography fontWeight={500}>{name}</Typography>
+          <Typography color="textSecondary" sx={{ fontSize: 12 }}>
+            Alias: {alias}
           </Typography>
           <Typography color="textSecondary" sx={{ fontSize: 12 }}>
             {datestring}
@@ -81,7 +75,7 @@ const ActivityCard = ({
 
       <Grid container item xs={6} alignItems="center" justifyContent="flex-end">
         <IconButton
-          onClick={activityDelete}
+          onClick={organizationDelete}
           sx={{ marginRight: 2 }}
           color="error"
           title="Borrar"
@@ -94,20 +88,14 @@ const ActivityCard = ({
           color="info"
           title="Editar"
           onClick={() => {
-            navigate(`/activity?edit=${id}&org=${organizationId}`);
+            navigate(`/organization/form?edit=${id}&acc=${accountId}`);
           }}
         >
           <EditIcon />
         </IconButton>
-
-        <Divider orientation="vertical" flexItem sx={{ marginRight: 2 }} />
-
-        <Typography fontWeight={500} variant="h6">
-          {currencies[currencyId].symbol + thousands_separators(amount)}
-        </Typography>
       </Grid>
     </Grid>
   );
 };
 
-export default ActivityCard;
+export default OrganizationCard;

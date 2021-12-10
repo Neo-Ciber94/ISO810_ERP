@@ -24,6 +24,7 @@ export const currencies = [
     symbol: "£",
   },
 ];
+
 export const ExpenseCategory = [
   {
     id: 1,
@@ -52,6 +53,11 @@ export const ExpenseCategory = [
 ];
 
 export const Services = [
+  {
+    id: 0,
+    name: "Selecciona",
+    homePage: "unapec",
+  },
   {
     id: 1,
     name: "MongoDB",

@@ -70,6 +70,8 @@ const Layout = ({ children }: { children: JSX.Element }) => {
             minHeight: "100vh",
             padding: 2,
             borderRadius: "0 1rem 1rem 0",
+            position: "sticky",
+            top: 0,
           }}
         >
           <Grid item>
