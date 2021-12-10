@@ -17,10 +17,10 @@ services:
       dockerfile: ./Dockerfile.server.dev
     container_name: iso810-erp-server
     restart: always
-    env_file:
-      - ./.env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5000
+      - ISO810_ERP_DB_CONNECTION_STRING=${ISO810_ERP_DB_CONNECTION_STRING}
+      - ISO810_JWT_SECRET=${ISO810_JWT_SECRET}
     ports:
       - 5000:5000
