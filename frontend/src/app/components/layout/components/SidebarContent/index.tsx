@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { UserStorageKey } from "../../../../config";
+import { axiosInstance } from "../../../../config";
+import { useAppContext } from "../../../../hooks/useAppContext";
 
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -13,6 +14,7 @@ interface SidebarContentProps {
 }
 
 const SidebarContent = ({ externalFunction }: SidebarContentProps) => {
+  const { updateUserData } = useAppContext();
   const navigate = useNavigate();
 
   const redirectUser = (url: string) => {
@@ -28,7 +30,9 @@ const SidebarContent = ({ externalFunction }: SidebarContentProps) => {
       externalFunction();
     }
 
-    console.log("Logging out!");
+    axiosInstance.post("/Account/logout").then(() => {
+      updateUserData({ user: { isAuthenticated: false } });
+    });
   };
 
   return (

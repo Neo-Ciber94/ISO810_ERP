@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { axiosInstance } from "../../app/config";
+import { useAppContext } from "../../app/hooks/useAppContext";
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -7,10 +8,11 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
-
 import styles from "./home.module.css";
 import homeBanner from "../../assets/homeBanner.jpg";
 import logo from "../../assets/logo.png";
+
+import * as Models from "../../models";
 
 enum formType {
   Login,
@@ -30,23 +32,31 @@ const defaultData: formDataProps = {
 };
 
 export const HomePage = () => {
+  const { context, updateUserData } = useAppContext();
   const [formStatus, updateFormStatus] = useState<formType>(0);
   const [formData, updateFormData] = useState<formDataProps>(defaultData);
   const [isLoadingRequest, updateLoadingRequestStatus] =
     useState<boolean>(false);
 
-  // FUNCTIONS------
   const onLogin = () => {
+    updateLoadingRequestStatus(true);
     const { email, password } = formData;
+    const payload: Models.AccountLogin = {
+      email,
+      password,
+    };
 
-    axiosInstance
-      .post("/Account/login", {
-        email,
-        password,
-      })
-      .then((response) => {
-        console.log(response);
-      });
+    axiosInstance.post("/Account/login", payload).then((response) => {
+      const { data } = response;
+      if (!data.success) {
+        alert("Correo electrónico o la contraseña son incorrectos");
+        updateLoadingRequestStatus(false);
+        return false;
+      }
+
+      const userData: any = data.data;
+      updateUserData({ user: { ...userData, isAuthenticated: true } });
+    });
   };
 
   const onRegister = () => {
@@ -142,6 +152,9 @@ export const HomePage = () => {
               ? "¡Inicia sesión!"
               : "¡Registrar cuenta!"}
           </Typography>
+          <Typography variant="h5" fontWeight={700} gutterBottom>
+            {context ? JSON.stringify(context) : null}
+          </Typography>
 
           {formStatus === formType.Register && (
             <TextField
@@ -212,16 +225,6 @@ export const HomePage = () => {
             {formStatus === formType.Login
               ? "Registrar cuenta"
               : "Iniciar sesión"}
-          </Button>
-
-          <Button
-            onClick={() => {
-              axiosInstance.get("/Account/me").then((response) => {
-                console.log(response);
-              });
-            }}
-          >
-            PROBANDO REQUEST
           </Button>
         </Grid>
       </Grid>

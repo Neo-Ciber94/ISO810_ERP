@@ -3,6 +3,6 @@ export interface Organization {
   accountId: number;
   name: string;
   alias: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

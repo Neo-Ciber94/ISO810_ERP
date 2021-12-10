@@ -1,4 +1,6 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { useAppContext } from "./app/hooks/useAppContext";
+import { axiosInstance } from "./app/config";
 import { Routes, Route } from "react-router-dom";
 
 import Loading from "./app/components/layout/components/Loading";
@@ -13,6 +15,23 @@ const DashboardPage = lazy(() => {
 });
 
 const AppRoutes = () => {
+  const { updateUserData } = useAppContext();
+
+  useEffect(() => {
+    // Check if user is authenticated
+    axiosInstance
+      .get("/Account/me")
+      .then((response) => {
+        const { data } = response;
+        updateUserData({ user: { ...data, isAuthenticated: true } });
+      })
+      .catch((error) => {
+        if (error) {
+          updateUserData({ user: { isAuthenticated: false } });
+        }
+      });
+  }, []);
+
   return (
     <Routes>
       <Route
