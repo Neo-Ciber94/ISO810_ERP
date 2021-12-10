@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Services, currencies } from "../../../dummyData";
 import { axiosInstance } from "../../../config";
+import { thousands_separators } from "../../../functions";
 
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
@@ -102,7 +103,7 @@ const ActivityCard = ({
         <Divider orientation="vertical" flexItem sx={{ marginRight: 2 }} />
 
         <Typography fontWeight={500} variant="h6">
-          {currencies[currencyId].symbol + amount}
+          {currencies[currencyId].symbol + thousands_separators(amount)}
         </Typography>
       </Grid>
     </Grid>
