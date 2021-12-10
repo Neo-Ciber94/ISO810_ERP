@@ -1,3 +1,5 @@
-bin/
-obj/
-.gitignore
+**/bin
+**/obj
+**/*.gitignore
+**/*.dockerignore
+**/Dockerfile*

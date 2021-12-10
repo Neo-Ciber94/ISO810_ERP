@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -20,7 +21,11 @@ namespace ISO810_ERP
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel()
+                        .UseContentRoot(Directory.GetCurrentDirectory())
+                        .UseUrls("http://+:80")
+                        .UseIISIntegration()
+                        .UseStartup<Startup>();
                 });
     }
 }

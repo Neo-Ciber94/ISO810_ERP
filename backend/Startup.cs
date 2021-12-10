@@ -123,7 +123,7 @@ namespace ISO810_ERP
             });
 
             services.AddJwtAuthentication();
-            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
+            // services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -144,10 +144,10 @@ namespace ISO810_ERP
 
             app.UseCors(CorsPolicy);
 
-            app.UseWhen((_) => EnableHttpsRedirection, appBuilder =>
-            {
-                appBuilder.UseHttpsRedirection();
-            });
+            // app.UseWhen((_) => EnableHttpsRedirection, appBuilder =>
+            // {
+            //     appBuilder.UseHttpsRedirection();
+            // });
 
             app.UseAuthentication();
 
