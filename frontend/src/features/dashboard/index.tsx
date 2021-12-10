@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../app/config";
 
 import Grid from "@mui/material/Grid";
+import Alert from "@mui/material/Alert";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -145,11 +146,13 @@ export const DashboardPage = () => {
           </Grid>
         )}
 
-        {activityData.Expenses.length ? (
-          activityData.Expenses.map((expense) => (
-            <ActivityCard key={expense.id} {...expense} />
-          ))
-        ) : (
+        {activityData.Expenses.length
+          ? activityData.Expenses.map((expense) => (
+              <ActivityCard key={expense.id} {...expense} />
+            ))
+          : null}
+
+        {!activityData.Expenses.length && selectedOrganization ? (
           <Typography
             variant="h6"
             color="textSecondary"
@@ -157,10 +160,27 @@ export const DashboardPage = () => {
             sx={{ width: "100%" }}
             gutterBottom
           >
-            {selectedOrganization
-              ? "No hay actividad disponible"
-              : "Debes seleccionar una organización"}
+            No hay actividad disponible
           </Typography>
+        ) : null}
+
+        {activityData.Organizations.length && !selectedOrganization ? (
+          <Typography
+            variant="h6"
+            color="textSecondary"
+            align="center"
+            sx={{ width: "100%" }}
+            gutterBottom
+          >
+            Debes seleccionar una organización
+          </Typography>
+        ) : null}
+
+        {!activityData.Organizations.length && (
+          <Alert severity="info" sx={{ width: "100%" }}>
+            ¡Para gestionar las actividades de tus negocios, debes crear una
+            organización!
+          </Alert>
         )}
       </Grid>
     </Grid>
