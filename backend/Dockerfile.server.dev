@@ -4,5 +4,5 @@ WORKDIR /app
 EXPOSE 5000
 ENV LOGGING__CONSOLE__FORMATTERNAME=Simple
 
-COPY ./bin/Publish/net6.0/ ./
+COPY ./bin/Publish/Debug/net6.0/ ./
 ENTRYPOINT ["dotnet", "ISO810_ERP.dll"]
