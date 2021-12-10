@@ -25,9 +25,11 @@ public class OrganizationRepository : IOrganizationRepository
         this.mapper = mapper;
     }
 
-    public IQueryable<OrganizationDto> GetAll()
+    public IQueryable<OrganizationDto> GetAll(int accountId)
     {
-        return context.Organizations.Select(o => mapper.Map<OrganizationDto>(o));
+        return context.Organizations
+            .Where(o => o.AccountId == accountId)
+            .Select(o => mapper.Map<OrganizationDto>(o));
     }
 
     public async Task<OrganizationDto?> GetById(int accountId, int organizationId)

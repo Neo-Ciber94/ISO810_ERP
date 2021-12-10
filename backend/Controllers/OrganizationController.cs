@@ -34,7 +34,14 @@ public class OrganizationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<OrganizationDto>>> GetAll()
     {
-        var result = await organizationRepository.GetAll().ToListAsync();
+        var currentAccount = HttpContext.GetCookieUserAccount();
+        
+        if (currentAccount == null)
+        {
+            return NotFound();
+        }
+
+        var result = await organizationRepository.GetAll(currentAccount.Id).ToListAsync();
         return Ok(result);
     }
 
