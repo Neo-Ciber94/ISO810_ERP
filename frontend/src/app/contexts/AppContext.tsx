@@ -17,7 +17,7 @@ const config: AppContextType = {
     id: 0,
     name: "",
     email: "",
-    isAuthenticated: true,
+    isAuthenticated: false,
   },
   updateUserData: () => {},
 };

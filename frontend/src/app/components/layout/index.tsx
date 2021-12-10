@@ -80,7 +80,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
             />
           </Grid>
 
-          <SideBarContent externalFunction />
+          <SideBarContent />
         </Grid>
 
         <Grid
@@ -90,7 +90,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
           item
           xs={12}
           md={7}
-          sx={{ background: "red", marginTop: 4, padding: 2 }}
+          sx={{ marginTop: 4, padding: 2 }}
         >
           {children}
         </Grid>

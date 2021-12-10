@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { axiosInstance } from "../../app/config";
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -37,7 +38,15 @@ export const HomePage = () => {
   // FUNCTIONS------
   const onLogin = () => {
     const { email, password } = formData;
-    console.log("Login");
+
+    axiosInstance
+      .post("/Account/login", {
+        email,
+        password,
+      })
+      .then((response) => {
+        console.log(response);
+      });
   };
 
   const onRegister = () => {
@@ -203,6 +212,16 @@ export const HomePage = () => {
             {formStatus === formType.Login
               ? "Registrar cuenta"
               : "Iniciar sesión"}
+          </Button>
+
+          <Button
+            onClick={() => {
+              axiosInstance.get("/Account/me").then((response) => {
+                console.log(response);
+              });
+            }}
+          >
+            PROBANDO REQUEST
           </Button>
         </Grid>
       </Grid>
