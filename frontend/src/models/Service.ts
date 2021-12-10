@@ -1,6 +1,5 @@
-
 export interface Service {
-    id: number;
-    name: string;
-    homePage: string;
+  id: number;
+  name: string;
+  homePage: string;
 }
