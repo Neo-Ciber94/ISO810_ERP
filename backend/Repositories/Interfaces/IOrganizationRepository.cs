@@ -7,7 +7,7 @@ namespace ISO810_ERP.Repositories.Interfaces
 {
     public interface IOrganizationRepository
     {
-        public IQueryable<OrganizationDto> GetAll();
+        public IQueryable<OrganizationDto> GetAll(int accountId);
         public Task<OrganizationDto?> GetById(int accountId, int organizationId);
         public Task<OrganizationDto> Create(int accountId, OrganizationCreate organization);
         public Task<OrganizationDto?> Update(int accountId, int organizationId, OrganizationUpdate organization);
