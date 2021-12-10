@@ -1,13 +1,8 @@
 // #define MEMORY_DB
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using dotenv.net;
-using ISO810_ERP.Config;
 using ISO810_ERP.Extensions;
 using ISO810_ERP.Filters;
 using ISO810_ERP.Models;
@@ -16,18 +11,13 @@ using ISO810_ERP.Repositories.Interfaces;
 using ISO810_ERP.Services;
 using ISO810_ERP.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Certificate;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace ISO810_ERP
@@ -83,7 +73,8 @@ namespace ISO810_ERP
                 options.AddPolicy(CorsPolicy,
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.WithOrigins("http://localhost:3000")
+                            .AllowCredentials()
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                     });
@@ -140,10 +131,10 @@ namespace ISO810_ERP
 
             app.UseCors(CorsPolicy);
 
-            app.UseWhen((_) => EnableHttpsRedirection, appBuilder =>
-            {
-                appBuilder.UseHttpsRedirection();
-            });
+            // app.UseWhen((_) => EnableHttpsRedirection, appBuilder =>
+            // {
+            //     appBuilder.UseHttpsRedirection();
+            // });
 
             app.UseAuthentication();
 
