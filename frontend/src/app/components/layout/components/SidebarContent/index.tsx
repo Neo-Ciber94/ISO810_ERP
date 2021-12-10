@@ -8,6 +8,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 
 interface SidebarContentProps {
   externalFunction?: any;
@@ -58,6 +59,14 @@ const SidebarContent = ({ externalFunction }: SidebarContentProps) => {
         icon={<DesignServicesIcon />}
         onClick={() => {
           redirectUser("/service");
+        }}
+      />
+
+      <NavLink
+        label="Opciones"
+        icon={<SettingsApplicationsIcon />}
+        onClick={() => {
+          redirectUser("/options");
         }}
       />
 
