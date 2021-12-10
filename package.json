@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd backend && dotnet watch run",
-    "dev:client": "cd frontend && npm run start"
+    "dev:client": "cd frontend && npm run start",
+    "publish:server-dev": "cd backend && dotnet publish -c Debug -o bin/Publish/net6.0/Debug/",
+    "publish:server-prod": "cd backend &&  dotnet publish -c Release -o bin/Publish/net6.0/Release/"
   },
   "author": "",
   "license": "ISC",

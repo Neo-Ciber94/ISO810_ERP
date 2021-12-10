@@ -10,7 +10,7 @@ WORKDIR /app
 COPY . .
 
 # install node modules
-RUN npm run install
+RUN npm install
 
 # build the project
 RUN npm run build

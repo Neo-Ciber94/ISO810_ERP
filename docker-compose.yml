@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  client:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile.client
+    container_name: iso810-erp-client
+    restart: always
+    depends_on:
+      - server
+    ports:
+      - 3000:80
+  server:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.server.dev
+    container_name: iso810-erp-server
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+    ports:
+      - 5000:5000
