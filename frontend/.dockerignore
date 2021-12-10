@@ -1,0 +1,6 @@
+**/.dockerignore
+**/Dockerfile*
+**/README*
+**/node_modules
+**/gitignore
+**/*.lock
