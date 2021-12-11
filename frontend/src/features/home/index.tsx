@@ -61,7 +61,30 @@ export const HomePage = () => {
 
   const onRegister = () => {
     const { name, email, password } = formData;
-    console.log("Register");
+    const payload = {
+      name,
+      email,
+      password,
+    };
+
+    axiosInstance
+      .post("/Account/signup", payload)
+      .then((response) => {
+        const { data } = response;
+        if (!data.success) {
+          if (data.message === "Email already exists") {
+            alert("El correo electrónico ya está en uso");
+            updateLoadingRequestStatus(false);
+            return false;
+          }
+        }
+
+        // Login user
+        onLogin();
+      })
+      .catch((Error) => {
+        alert("Campos con datos inválidos!");
+      });
   };
 
   const updateInput = (e: any, key: string) => {

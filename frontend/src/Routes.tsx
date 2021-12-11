@@ -22,6 +22,10 @@ const ServicePage = lazy(() => {
   return import("./pages/service");
 });
 
+const OptionsPage = lazy(() => {
+  return import("./pages/options");
+});
+
 const OrganizationPage = lazy(() => {
   return import("./pages/organization/index");
 });
@@ -87,6 +91,17 @@ const AppRoutes = () => {
           <Suspense fallback={<Loading />}>
             <ProtectedRoute>
               <ServicePage />
+            </ProtectedRoute>
+          </Suspense>
+        }
+      />
+
+      <Route
+        path="options"
+        element={
+          <Suspense fallback={<Loading />}>
+            <ProtectedRoute>
+              <OptionsPage />
             </ProtectedRoute>
           </Suspense>
         }
