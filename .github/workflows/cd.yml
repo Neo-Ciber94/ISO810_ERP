@@ -1,7 +1,7 @@
 name: Deploy Docker Remote Server
 on:
   push:
-    branches: [main]
+    branches: ["feature/ci-cd"]
 jobs:
   # Publish the docker images to the registry
   deploy:
