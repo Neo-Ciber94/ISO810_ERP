@@ -24,7 +24,9 @@ jobs:
 
       # Build the docker compose image
       - name: Build the docker image
-        run: docker compose build
+        run: |
+          export ERP_VERSION=${{ github.ref_name }}
+          docker compose build
 
       # Push the docker image to the registry
       - name: Push the docker image to the registry
@@ -42,8 +44,8 @@ jobs:
       - name: Pull the docker image from the registry
         run: |
           cd /home/coding/unapec/iso810/erp/
-          cd mkdir v{{ github.ref_name }}/
-          cd v{{ github.ref_name }}/
+          cd mkdir v${{ github.ref_name }}/
+          cd v${{ github.ref_name }}/
           curl https://raw.githubusercontent.com/Neo-Ciber94/ISO810_ERP/main/docker-compose.yml > docker-compose.yml
           docker-compose pull
 
@@ -51,9 +53,9 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo ISO810_ERP_DB_CONNECTION_STRING=${{ISO810_ERP_DB_CONNECTION_STRING}} >> .env
-          echo ISO810_JWT_SECRET=${{ISO810_JWT_SECRET}} >> .env
-          
+          echo "ISO810_ERP_DB_CONNECTION_STRING=${{ISO810_ERP_DB_CONNECTION_STRING}}" >> .env
+          echo "ISO810_JWT_SECRET=${{ISO810_JWT_SECRET}}" >> .env
+
       # Stops and deletes all the containers and run the docker compose
       - name: Run the docker image
         run: |
