@@ -11,6 +11,8 @@ jobs:
       # Checkout to the repository
       - name: Checkout to repository
         uses: actions/checkout@v2
+      - name: Debug
+        run: echo ${{ secrets.DOCKERHUB_USERNAME }}
 
       # Access to docker hub
       - name: Docker Login
