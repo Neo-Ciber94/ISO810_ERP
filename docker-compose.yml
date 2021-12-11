@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  client:
+    image: neociber/iso810-erp-client:${ERP_VERSION:-latest}
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile.client
+    container_name: iso810-erp-client
+    restart: always
+    depends_on:
+      - server
+    ports:
+      - 3000:80
+  server:
+    image: neociber/iso810-erp-server:${ERP_VERSION:-latest}
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.server.dev
+    container_name: iso810-erp-server
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - ISO810_ERP_DB_CONNECTION_STRING=${ISO810_ERP_DB_CONNECTION_STRING}
+      - ISO810_JWT_SECRET=${ISO810_JWT_SECRET}
+    ports:
+      - 5000:5000
