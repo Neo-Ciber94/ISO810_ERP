@@ -18,7 +18,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+          
+      # Build the .NET 6 Project
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: 6.0
+      - name: Restore the nuget packages
+        run: dotnet restore ./backend
+      - name: Publish the project
+        run: dotnet publish -c Debug -o backend/bin/Publish/net6.0/Debug/ ./backend
+          
       # Build the docker compose image
       - name: Build the docker image
         run: |
@@ -33,7 +43,7 @@ jobs:
       - name: Connect to the remote server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_IP }}
+          host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
 
