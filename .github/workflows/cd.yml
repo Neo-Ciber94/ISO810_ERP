@@ -53,8 +53,8 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo "ISO810_ERP_DB_CONNECTION_STRING=${{ISO810_ERP_DB_CONNECTION_STRING}}" >> .env
-          echo "ISO810_JWT_SECRET=${{ISO810_JWT_SECRET}}" >> .env
+          echo "ISO810_ERP_DB_CONNECTION_STRING=${{ secrets.ISO810_ERP_DB_CONNECTION_STRING }}" >> .env
+          echo "ISO810_JWT_SECRET=${{ secrets.ISO810_JWT_SECRET }}" >> .env
 
       # Stops and deletes all the containers and run the docker compose
       - name: Run the docker image
