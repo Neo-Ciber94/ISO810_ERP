@@ -23,7 +23,7 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.9.0
         with:
-          dotnet-version: 6.0
+          dotnet-version: 6.0.0
       - name: Restore the nuget packages
         run: dotnet restore ./backend
       - name: Publish the project
