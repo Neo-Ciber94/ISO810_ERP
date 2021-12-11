@@ -73,7 +73,7 @@ namespace ISO810_ERP
                 options.AddPolicy(CorsPolicy,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000")
+                        builder.WithOrigins("http://localhost:3000", "http://143.198.178.55:3000")
                             .AllowCredentials()
                             .AllowAnyMethod()
                             .AllowAnyHeader();
