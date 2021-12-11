@@ -58,7 +58,7 @@ jobs:
       # Stops and deletes all the containers and run the docker compose
       - name: Run the docker image
         run: |
-          docker-compose down
           docker rm -f $(docker ps -a -q)
+          docker rmi $(docker images -a -q)
           docker volume rm $(docker volume ls -q)
           docker-compose up -d --no-build --env-file=.env
