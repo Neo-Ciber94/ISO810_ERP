@@ -34,7 +34,7 @@ jobs:
 
       # Connect to the remote server
       - name: Connect to the remote server
-        uses: docker/ssh-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_IP }}
           username: ${{ secrets.SSH_USER }}
