@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   client:
-    image: neociber/iso810-erp-client:0.1
+    image: neociber/iso810-erp-client:${ERP_VERSION:-latest}
     build:
       context: ./frontend
       dockerfile: ./Dockerfile.client
@@ -13,7 +13,7 @@ services:
     ports:
       - 3000:80
   server:
-    image: neociber/iso810-erp-server:0.1
+    image: neociber/iso810-erp-server:${ERP_VERSION:-latest}
     build:
       context: ./backend
       dockerfile: ./Dockerfile.server.dev
