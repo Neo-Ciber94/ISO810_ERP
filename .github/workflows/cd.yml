@@ -1,8 +1,7 @@
 name: Deploy Docker Remote Server
 on:
   push:
-    branches: [feature/ci-cd]
-
+    branches: [main]
 jobs:
   # Publish the docker images to the registry
   deploy:
@@ -12,21 +11,13 @@ jobs:
       # Checkout to the repository
       - name: Checkout to repository
         uses: actions/checkout@v2
-
-      # Debug docker
-      - name: debug docker
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        run: echo $DOCKER_USERNAME
+        
       # Access to docker hub
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker Login
+        uses: docker/login-action@v1.10.0
         with:
-          username: $DOCKER_USERNAME
-          password: $DOCKER_PASSWORD
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Build the docker compose image
       - name: Build the docker image
@@ -65,7 +56,7 @@ jobs:
       # Stops and deletes all the containers and run the docker compose
       - name: Run the docker image
         run: |
-          docker-compose down
           docker rm -f $(docker ps -a -q)
+          docker rmi $(docker images -a -q)
           docker volume rm $(docker volume ls -q)
           docker-compose up -d --no-build --env-file=.env
