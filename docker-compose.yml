@@ -18,6 +18,8 @@ services:
       context: ./backend
       dockerfile: ./Dockerfile.server.dev
     container_name: iso810-erp-server
+    depends_on:
+      - db
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -26,3 +28,15 @@ services:
       - ISO810_JWT_SECRET=${ISO810_JWT_SECRET}
     ports:
       - 5000:5000
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    volumes:
+      - ./iso810-erp/db/mssql/data
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - SA_PASSWORD=${ISO810_RP_SA_PASSWORD}
+    ports:
+      - 1433:1433
+      
