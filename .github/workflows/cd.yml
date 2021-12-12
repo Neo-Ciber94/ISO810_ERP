@@ -6,6 +6,7 @@ jobs:
   # Publish the docker images to the registry
   deploy:
     name: Deploy
+    if: ${{ false }} 
     runs-on: ubuntu-latest
     steps:
       # Checkout to the repository
