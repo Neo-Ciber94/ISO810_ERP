@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ISO810_ERP.Migrations
 {
     [DbContext(typeof(ErpDbContext))]
-    [Migration("20211209005355_Entity Validations")]
-    partial class EntityValidations
+    [Migration("20211211171340_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

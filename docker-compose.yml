@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   client:
-    image: neociber/iso810-erp-client:${ERP_VERSION:-latest}
+    image: neociber/iso810-erp-client:latest
     build:
       context: ./frontend
       dockerfile: ./Dockerfile.client
@@ -13,11 +13,13 @@ services:
     ports:
       - 3000:80
   server:
-    image: neociber/iso810-erp-server:${ERP_VERSION:-latest}
+    image: neociber/iso810-erp-server:latest
     build:
       context: ./backend
       dockerfile: ./Dockerfile.server.dev
     container_name: iso810-erp-server
+    depends_on:
+      - db
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -26,3 +28,15 @@ services:
       - ISO810_JWT_SECRET=${ISO810_JWT_SECRET}
     ports:
       - 5000:5000
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    volumes:
+      - ./iso810-erp/db/mssql/data
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - SA_PASSWORD=${ISO810_ERP_SA_PASSWORD}
+    ports:
+      - 1433:1433
+      

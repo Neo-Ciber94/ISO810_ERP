@@ -25,19 +25,11 @@ namespace ISO810_ERP
     public class Startup
     {
         const string CorsPolicy = "Everyone";
-        private static readonly bool EnableInMemoryDatabase;
-        private static readonly bool EnableHttpsRedirection;
-        private static readonly bool EnableAuthorization;
 
         static Startup()
         {
             // Read the .env file from the root of the project
             DotEnv.Load(options: new DotEnvOptions(envFilePaths: new[] { "../.env" }));
-
-            // Initialize the static variables
-            EnableInMemoryDatabase = Environment.GetEnvironmentVariable("ISO810_ENABLE_IN_MEMORY_DB") == "true";
-            EnableHttpsRedirection = Environment.GetEnvironmentVariable("ISO810_ENABLE_HTTPS") == "true";
-            EnableAuthorization = Environment.GetEnvironmentVariable("ISO810_ENABLE_AUTHORIZATION") == "true";
         }
 
         public Startup(IConfiguration configuration)
@@ -73,7 +65,7 @@ namespace ISO810_ERP
                 options.AddPolicy(CorsPolicy,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000", "http://143.198.178.55:3000")
+                        builder.WithOrigins("http://localhost:3000")
                             .AllowCredentials()
                             .AllowAnyMethod()
                             .AllowAnyHeader();
@@ -97,20 +89,13 @@ namespace ISO810_ERP
 
             services.AddDbContext<ErpDbContext>(options =>
             {
-                if (EnableInMemoryDatabase)
+                string? connectionString = Environment.GetEnvironmentVariable("ISO810_ERP_DB_CONNECTION_STRING");
+                if (connectionString == null)
                 {
-                    options.UseInMemoryDatabase("ISO810_ERP");
+                    throw new InvalidOperationException("ConnectionString is not set");
                 }
-                else
-                {
-                    string? connectionString = Environment.GetEnvironmentVariable("ISO810_ERP_DB_CONNECTION_STRING");
-                    if (connectionString == null)
-                    {
-                        throw new InvalidOperationException("ConnectionString is not set");
-                    }
 
-                    options.UseSqlServer(connectionString);
-                }
+                options.UseSqlServer(connectionString);
             });
 
             services.AddJwtAuthentication();
@@ -135,10 +120,7 @@ namespace ISO810_ERP
 
             app.UseCors(CorsPolicy);
 
-            // app.UseWhen((_) => EnableHttpsRedirection, appBuilder =>
-            // {
-            //     appBuilder.UseHttpsRedirection();
-            // });
+            // appBuilder.UseHttpsRedirection();
 
             app.UseAuthentication();
 
@@ -146,15 +128,7 @@ namespace ISO810_ERP
 
             app.UseEndpoints(endpoints =>
             {
-                if (env.IsDevelopment() && !EnableAuthorization)
-                {
-                    Console.WriteLine("WARNING: Authorization is disabled. This is for development only.");
-                    endpoints.MapControllers().WithMetadata(new AllowAnonymousAttribute());
-                }
-                else
-                {
-                    endpoints.MapControllers();
-                }
+                endpoints.MapControllers();
             });
         }
     }

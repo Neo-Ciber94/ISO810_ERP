@@ -1,11 +1,12 @@
 name: Deploy Docker Remote Server
 on:
   push:
-    branches: [main]
+    branches: ["feature/ci-cd"]
 jobs:
   # Publish the docker images to the registry
   deploy:
     name: Deploy
+    if: ${{ false }} 
     runs-on: ubuntu-latest
     steps:
       # Checkout to the repository
@@ -16,11 +17,19 @@ jobs:
       - name: Docker Login
         uses: docker/login-action@v1.10.0
         with:
-          # Username used to log against the Docker registry
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          # Password or personal access token used to log against the Docker registry
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+          
+      # Build the .NET 6 Project
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore the nuget packages
+        run: dotnet restore ./backend
+      - name: Publish the project
+        run: dotnet publish -c Debug -o backend/bin/Publish/net6.0/Debug/ ./backend
+          
       # Build the docker compose image
       - name: Build the docker image
         run: |
@@ -35,7 +44,7 @@ jobs:
       - name: Connect to the remote server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_IP }}
+          host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
 
