@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   client:
-    image: neociber/iso810-erp-client:latest
+    image: neociber/iso810-erp-client
     build:
       context: ./frontend
       dockerfile: ./Dockerfile.client
@@ -13,7 +13,7 @@ services:
     ports:
       - 3000:80
   server:
-    image: neociber/iso810-erp-server:latest
+    image: neociber/iso810-erp-server
     build:
       context: ./backend
       dockerfile: ./Dockerfile.server
@@ -32,11 +32,11 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     volumes:
       - /iso810-erp/data/mssql/
+    container_name: iso810-erp-db
     restart: always
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_PID=Express
       - SA_PASSWORD=${ISO810_ERP_SA_PASSWORD}
     ports:
-      - 1433:1433
+      - 1499:1433
       
