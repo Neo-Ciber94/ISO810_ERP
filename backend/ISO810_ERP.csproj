@@ -9,7 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Watch Include="..\**\*.env" />
+    <!-- This cause slow down of docker build without checking if we are in a docker container-->
+    <Watch Include="..\**\*.env" Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' != 'true'" />
   </ItemGroup>
 
   <ItemGroup>

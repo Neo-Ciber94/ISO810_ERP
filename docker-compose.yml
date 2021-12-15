@@ -16,7 +16,7 @@ services:
     image: neociber/iso810-erp-server:latest
     build:
       context: ./backend
-      dockerfile: ./Dockerfile.server.dev
+      dockerfile: ./Dockerfile.server
     container_name: iso810-erp-server
     depends_on:
       - db
@@ -31,7 +31,7 @@ services:
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     volumes:
-      - ./iso810-erp/db/mssql/data
+      - /iso810-erp/data/mssql/
     restart: always
     environment:
       - ACCEPT_EULA=Y
