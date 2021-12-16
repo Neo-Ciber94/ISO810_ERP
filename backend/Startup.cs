@@ -108,13 +108,15 @@ namespace ISO810_ERP
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ISO810_ERP v1");
-                    c.RoutePrefix = string.Empty;
-                });
             }
+
+            // Always use swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ISO810_ERP v1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
