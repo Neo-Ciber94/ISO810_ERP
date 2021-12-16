@@ -110,6 +110,12 @@ namespace ISO810_ERP
                 app.UseDeveloperExceptionPage();
             }
 
+            // Create the database migration
+            using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetService<ErpDbContext>()!.Database.Migrate();
+            }
+
             // Always use swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
