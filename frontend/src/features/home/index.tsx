@@ -56,7 +56,8 @@ export const HomePage = () => {
 
       const userData: any = data.data;
       updateUserData({ user: { ...userData, isAuthenticated: true } });
-    });
+    })
+    .catch(() => updateLoadingRequestStatus(false))
   };
 
   const onRegister = () => {
@@ -82,9 +83,8 @@ export const HomePage = () => {
         // Login user
         onLogin();
       })
-      .catch((Error) => {
-        alert("Campos con datos inválidos!");
-      });
+      .catch(() => alert("Campos con datos inválidos!"))
+      .finally(() => updateLoadingRequestStatus(false))
   };
 
   const updateInput = (e: any, key: string) => {

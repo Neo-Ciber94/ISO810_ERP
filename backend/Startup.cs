@@ -108,13 +108,21 @@ namespace ISO810_ERP
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ISO810_ERP v1");
-                    c.RoutePrefix = string.Empty;
-                });
             }
+
+            // Create the database migration
+            using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetService<ErpDbContext>()!.Database.Migrate();
+            }
+
+            // Always use swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ISO810_ERP v1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
